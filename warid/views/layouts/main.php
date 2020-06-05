@@ -33,10 +33,7 @@ AppAsset::register($this);
     $isAssessor = false;
     if (!Yii::$app->user->isGuest) {
         $userProfile = \frontend\models\UserProfile::find()->andWhere(['userId' => Yii::$app->user->identity->id])->One();
-        $numberOfAssessorRoles = Assessor::find()->andWhere(['profileId' => $userProfile->profileId])->All();
-        if (sizeof($numberOfAssessorRoles) > 0) {
-            $isAssessor = true;
-        }
+
     }
 //    echo '<br/><br/><br/>dasdadsa ' . $userProfile->profileId;
     NavBar::begin([
@@ -55,9 +52,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        if ($isAssessor) {
-            $menuItems[] = ['label' => 'Assessor Page', 'url' => ['/assessor']];
-        }
+
 
         $menuItems[] = ['label' => 'Profile', 'url' => ['/profile/index']];
         $menuItems[] = '<li>'
