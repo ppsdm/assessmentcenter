@@ -17,6 +17,11 @@ class WaridController extends \yii\web\Controller
         ]);
     }
 
+    public function actionTestpdf()
+    {
+
+        return $this->render('testpdf');
+    }
     public function actionPdf()
     {
 
@@ -92,29 +97,35 @@ class WaridController extends \yii\web\Controller
             if(strpos($item2_value->attributes()->identifier, $needle)) {
 
                 if (trim($item2_value->candidateResponse->value) !== '') {
-//                    echo '<br/>';
-//        echo $item2_value->candidateResponse->value;
+
                     $answered[$type]++;
                 }
 
-//                            echo '<br/>';
-//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->candidateResponse->value;
-//                            echo '<br/>';
             }
 
     }
 
     public function actionNilaiwarid($resultId) {
-        $result = $this->getNilaiwarid($resultId, false);
-//        echo '<pre>';
-//        print_r($result);
-//        echo '</pre>';
-
+        $result = $this->getNilaiwarid($resultId, true);
+        echo '<pre>';
+        print_r($result);
+        ob_end_clean();
         return $this->render('warid', [
             'result' => $result,
         ]);
 
 
+    }
+    private function getRst($score)
+    {
+        switch ($score) {
+            case $score < 4 :
+                return 'r';
+            case $score == 4 :
+                return 's';
+            default :
+                return 't';
+        }
     }
     public function getNilaiwarid($resultId, $debug) {
 
@@ -194,9 +205,6 @@ class WaridController extends \yii\web\Controller
         $items=simplexml_load_string($output) or die("Error: Cannot create object");
 
         foreach($items as $item_key => $item_value) {
-//            echo $item_key;
-//            echo ' : ';
-//            echo $item_value->attributes()->identifier;
 
             foreach($item_value as $item2_key => $item2_value)
             {
@@ -246,7 +254,8 @@ class WaridController extends \yii\web\Controller
                     if (in_array($item_value->attributes()->identifier, $biodata_items)) {
                         if ($debug) {
                             echo '<br/>';
-                            echo $item2_value->candidateResponse->value;
+                            $ret['biodata'][(string) $item2_value->attributes()->identifier] = (string)$item2_value->candidateResponse->value;
+                            echo $item2_value->attributes()->identifier . ' : ' .$item2_value->candidateResponse->value;
                         }
 
 
@@ -414,10 +423,8 @@ class WaridController extends \yii\web\Controller
             ->orderBy(['unscaled' => SORT_DESC])
             ->One();
         $konsentrasi = ($cepat->scaled + $teliti->scaled) / 2;
-        $ret['kecepatan'] = $cepat->scaled;
-        $ret['ketelitian'] = $teliti->scaled;
         $ret['aspek']['inteligensi_umum'] = $inteligensi_umum;
-        $ret['aspek']['id'] = $iq;
+        $ret['aspek']['iq'] = $iq;
         $ret['aspek']['daya_analisa_sintesa'] = round($daya_analisa_sintesa);
         $ret['aspek']['konseptual'] = $konseptual;
         $ret['aspek']['pengetahuan_umum'] = $pengetahuan_umum;
@@ -430,7 +437,14 @@ class WaridController extends \yii\web\Controller
         $ret['aspek']['konsentrasi'] = round($konsentrasi);
         $ret['aspek']['stabilitas_emosi'] = $stabilitas_emosi;
         $ret['aspek']['penyesuaian_diri'] = $penyesuaian_diri;
-        $ret['aspek']['hubungan_internasional'] = round($hubungan_internasional);
+        $ret['aspek']['hubungan_interpersonal'] = round($hubungan_internasional);
+        $ret['uraian']['aspek_kecerdasan'] = $this->getRst($inteligensi_umum) . $this->getRst(round($daya_analisa_sintesa)) . $this->getRst($konseptual);
+        $ret['uraian']['aspek_kepribadian'] = $this->getRst($stabilitas_emosi) . $this->getRst($penyesuaian_diri) . $this->getRst(round($hubungan_internasional));
+        $ret['uraian']['aspek_sikap_kerja'] = $this->getRst($cepat->scaled) . $this->getRst($teliti->scaled) . $this->getRst(round($konsentrasi));
+        $ret['riasec'] = '';
+        foreach($riasec as $key => $item) {
+            $ret['riasec'] = $ret['riasec'] . $key;
+        }
 
 
 

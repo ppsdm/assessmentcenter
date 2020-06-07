@@ -12,6 +12,9 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'warid\controllers',
+    'aliases' => [
+        '@tcpdf' => '@vendor/reno/tcpdf',
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-warid',
