@@ -227,6 +227,19 @@ $namaaspek12 = "<B>STABILITAS EMOSI</B><BR>Menunjukkan kematangan pribadi, mampu
 $namaaspek13 = "<B>PENYESUAIAN DIRI</B><BR>Mampu menyesuaikan diri dengan perbagai situasi,  berbagai tugas, tanggung jawab dan orang-orang disekitarnya.";
 $namaaspek14 = "<B>HUBUNGAN INTERPERSONAL</B><BR>Kemampuan menghadapi bermacam macam orang secara efektif dalam berbagai situasi.";
 
+$aspek_kecerdasan = $result['uraian']['aspek_kecerdasan'];
+$aspek_kepribadian = $result['uraian']['aspek_kepribadian'];
+$aspek_sikap_kerja = $result['uraian']['aspek_sikap_kerja'];
+
+$uraian_pengetahuan_umum =  $result['uraian']['pengetahuan_umum'];
+$uraian_kemampuan_numerik =  $result['uraian']['kemampuan_numerik'];
+$uraian_kemampuan_dasar_teknik =  $result['uraian']['kemampuan_dasar_teknik'];
+$uraian_klasifikasi_dan_diferensiasi =  $result['uraian']['klasifikasi_dan_diferensiasi'];
+$uraian_orientasi_pandang_ruang =  $result['uraian']['orientasi_pandang_ruang'];
+$uraian_iq = $result['uraian']['iq'];
+$uraian_iqrange = $result['uraian']['range_iq'];
+$iq = $result['aspek']['iq'];
+
     $rekomendasi = "Penjelasan lebih detail tentang arah minat dan penjabarannya dapat dipelajari pada halaman belakang laporan";
 // Include the main TCPDF library (search for installation path).
 
@@ -904,40 +917,37 @@ $tbl = <<<EOD
   }
 </style>
 <p>
+    <strong>URAIAN ASPEK INTELEKTUAL</strong>
+</p>
+Kecerdasan umum $nama diperkirakan berfungsi pada taraf $uraian_iq, dengan IQ $iq (dalam kisaran $uraian_iqrange) berdasarkan skala CFIT.
+<p>
+$aspek_kecerdasan
+</p>
+<p>
+Ditinjau dari kemampuan akademis $nama diperoleh gambaran sebagai berikut:
+</p>
+<ul>
+<li>$uraian_pengetahuan_umum</li>
+<li>$uraian_kemampuan_numerik</li>
+<li>$uraian_kemampuan_dasar_teknik</li>
+<li>$uraian_klasifikasi_dan_diferensiasi</li>
+<li>$uraian_orientasi_pandang_ruang</li>
+</ul>
+
+<p>
     <strong>URAIAN ASPEK SIKAP KERJA</strong>
 </p>
 <p>
-    <strong></strong>
+$aspek_sikap_kerja
 </p>
-<p>
-    Dalam melaksanakan penugasannya, $nama memiliki kecepatan
-    kerja yang baik, sehingga ia mampu untuk mengerjakan tugas-tugasnya dalam
-    waktu yang relatif cepat. Aliefia Hidayati Y juga bisa memfokuskan
-    perhatiannya pada setiap tugas yang dilakukannya. Perhatiannya tidak mudah
-    teralihkan. Sementara, kehati-hatiannya dalam bekerja tergolong cukup
-    memadai. Untuk meningkatkan kualitas dan akurasi hasil kerjanya, sekaligus
-    meminimalisir peluang terjadinya kesalahan kerja, maka Aliefia Hidayati Y
-    perlu memeriksa kembali setiap tugas belajarnya, sebelum diserahkan pada
-    pihak guru / sekolah.
-</p>
+
 <p>
     <strong>URAIAN ASPEK KEPRIBADIAN</strong>
 </p>
 <p>
-    <strong></strong>
+$aspek_kepribadian
 </p>
-<p>
-    Sikap $nama yang senantiasa tenang dan terkendali menunjukkan
-    adanya upaya untuk mempertahankan keadaan emosi agar tidak mudah bergejolak
-    pada kondisi tertentu. Meski terkadang masih terlihat belum konsisten,
-    upaya ini menunjukkan adanya proses kematangan yang cukup positif pada
-    perkembangan dirinya. Hal ini juga didukung oleh pemahaman yang cukup
-    mendalam terhadap kebutuhan maupun kondisi sesama. Ia selalu berupaya
-    menjaga perasaan orang lain dan terlibat pada kegiatan sosial yang
-    produktif dengan teman-temannya. Sementara, aspek yang masih perlu
-    ditingkatkan adalah rasa percaya dirinya, manakala menghadapi situasi baru
-    yang berbeda.
-</p>
+
 <p>
     <strong></strong>
 </p>
