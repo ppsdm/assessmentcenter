@@ -69,6 +69,34 @@ $total_min = $min1 + $min2 + $min3 + $min4 + $min5 + $min6 + $min7 + $min8 + $mi
 $total_max = $max1 + $max2 + $max3 + $max4 + $max5 + $max6 + $max7 + $max8 + $max9 + $max10;
 
 $riasec = strtoupper($result['riasec']);
+$riasec_string = '';
+foreach(str_split($riasec) as $letter) {
+    switch ($letter) {
+        case 'R':
+            $riasec_string = $riasec_string . ', ' . 'Realistik';
+            break;
+        case 'I':
+            $riasec_string = $riasec_string . ', ' . 'Investigatif';
+            break;
+        case 'A':
+            $riasec_string = $riasec_string . ', ' . 'Artistik';
+            break;
+        case 'S':
+            $riasec_string = $riasec_string . ', ' . 'Sosial';
+            break;
+        case 'E':
+            $riasec_string = $riasec_string . ', ' . 'Enterprising';
+            break;
+        case 'C':
+            $riasec_string = $riasec_string . ', ' . 'Konvensional';
+            break;
+    }
+}
+
+$riasec_string = substr($riasec_string,2);
+
+
+$rekomendasi_jenjang_pendidikan = '';
 
 
 $rating1 = $result['aspek']['inteligensi_umum'];
@@ -242,6 +270,39 @@ $iq = $result['aspek']['iq'];
 
     $rekomendasi = "Penjelasan lebih detail tentang arah minat dan penjabarannya dapat dipelajari pada halaman belakang laporan";
 // Include the main TCPDF library (search for installation path).
+switch ($iq) {
+    case $iq < 95 :
+        $rekomendasi_jenjang_pendidikan = 'jenjang diploma';
+    default :
+        $rekomendasi_jenjang_pendidikan = 'jenjang sarjana atau jenjang diploma';
+}
+$ipa_ips = '';
+$ips = ($rating4 + ($rating3 * 3) + ($rating14 * 3) + $rating6) / 8;
+$ipa = ($rating4 + ($rating8 * 3) + $rating5 + ($rating7 * 3)) / 8;
+if ($rating1 > 5) {
+    $ipa_ips = 'IPA maupun IPS';
+} else {
+
+    switch(true) {
+        case (($ipa >= 4.5) && ($ips >= 4.5)) :
+            $ipa_ips = 'IPA maupun IPS';
+            break;
+        case (($ipa < 4.5) && ($ips >= 4.5)) :
+            $ipa_ips = 'IPS';
+            break;
+        case (($ipa >= 4.5) && ($ips < 4.5)) :
+            $ipa_ips = 'IPA';
+            break;
+        case (($ipa < 4.5) && ($ips < 4.5)) :
+            $ipa_ips = 'IPS';
+            break;
+    }
+}
+
+
+
+
+
 
 ob_end_clean();
 
@@ -948,28 +1009,14 @@ $aspek_sikap_kerja
 $aspek_kepribadian
 </p>
 
-<p>
-    <strong></strong>
-</p>
+
 <p>
     <strong>REKOMENDASI</strong>
 </p>
 <p>
-    <strong></strong>
+    $nama, memiliki orientasi minat pada bidang ($riasec), yaitu $riasec_string. Berdasarkan hasil pemeriksaan psikologik yang mencakup
+    aspek kecerdasan, sikap kerja, kepribadian, dan minat, maka $nama lebih disarankan untuk melanjutkan pendidikan pada $rekomendasi_jenjang_pendidikan yang lebih berorientasi pada bidang keilmuan $ipa_ips.
 </p>
-<p>
-    $nama, memiliki orientasi minat pada bidang (SI), yaitu Sosial
-    dan Investigatif. Berdasarkan hasil pemeriksaan psikologik yang mencakup
-    aspek kecerdasan, sikap kerja, kepribadian, dan minat, maka Aliefia
-    Hidayati Y lebih disarankan untuk melanjutkan pendidikan pada jenjang
-    sarjana atau jenjang diploma. Beberapa alternatif pilihan jurusan yang
-    dapat direkomendasikan antara lain: biologi, pendidikan, ekonomi dan
-    bisnis, antropologi, hukum, teknik, kesehatan masyarakat, psikologi,
-    kedokteran, keperawatan, atau administrasi
-</p>
-
-
-
             <table>
             <tr><td width="100%"></td></tr>
             <tr>
