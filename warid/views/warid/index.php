@@ -1,9 +1,29 @@
 <?php
 /* @var $this yii\web\View */
-?>
-<h1>warid/index</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+use yii\grid\GridView;
+use yii\helpers\Html;
+
+echo GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        // Simple columns defined by the data contained in $dataProvider.
+        // Data from the model's column will be used.
+        'result_id',
+'test_taker', 'delivery',
+        [
+            'label'=>'result',
+            'format' => 'raw',
+            'value'=>function ($data) {
+//                return Html::a(['warid/nilaiwarid']);
+                return '<a href="nilaiwarid?testtakerId=' . urlencode( $data->test_taker) .'&deliveryId='.urlencode($data->delivery).'">RESULT</a>';
+//                return;
+            },
+        ],
+    ],
+]);
+
+
+
+?>

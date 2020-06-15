@@ -1,10 +1,14 @@
 <?php
 
 namespace warid\controllers;
+use app\models\ResultsStorage;
 use linslin\yii2\curl;
 use warid\models\KamusUraian;
 use warid\models\ScaleRef;
 use yii\httpclient\XmlParser;
+
+use yii\data\ActiveDataProvider;
+
 class WaridController extends \yii\web\Controller
 {
     public function actionIndex()
@@ -12,9 +16,24 @@ class WaridController extends \yii\web\Controller
 //        $searchModel = new ProjectSearch();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 //
+        $deliveryURI = 'http://cat.ppsdm.com/cat.rdf#i159084539617004827';
+//        $deliveryURI = 'http://cat.ppsdm.com/cat.rdf#i159129520437266901';
+        $testtakers = ResultsStorage::find()->select(['test_taker'])->andWhere(['delivery' => $deliveryURI])->distinct()->All();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => ResultsStorage::find()
+//                ->select(['test_taker'])
+                ->andWhere(['delivery' => $deliveryURI])->distinct(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+//        echo '<pre>';
+//        print_r($testtakers);
         return $this->render('index', [
 //            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -37,10 +56,12 @@ class WaridController extends \yii\web\Controller
 
     }
 
-    private function curlResult($resultId) {
+    private function curlResult($testtakerId, $deliveryId) {
         $curl = new curl\Curl();
+//        $deliveryURI = 'http://cat.ppsdm.com/cat.rdf#i159084539617004827';
+//        $testtakerURI = 'http://cat.ppsdm.com/cat.rdf#i159075081183274815';
         $taobase = "http://cat.ppsdm.com/taoResultServer/QtiRestResults/getLatest";
-                $uri = "http://cat.ppsdm.com/taoResultServer/QtiRestResults/getLatest?testtaker=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i159075081183274815&delivery=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i159084539617004827";
+                $uri = "http://cat.ppsdm.com/taoResultServer/QtiRestResults/getLatest?testtaker=".urlencode($testtakerId)."&delivery=" . urlencode($deliveryId);
 //        $uri = "http://cat.ppsdm.com/taoResultServer/QtiRestResults/getLatest?testtaker=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i1589530618237525&delivery=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i158969457756132314"; //uri bermasalah karena ada photoupload
 //        $uri = "http://cat.ppsdm.com/taoResultServer/QtiRestResults/getLatest?testtaker=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i1589530618237525&delivery=http%3A%2F%2Fcat.ppsdm.com%2Fcat.rdf%23i159056451292282685";
         // create curl resource
@@ -109,8 +130,8 @@ class WaridController extends \yii\web\Controller
 
     }
 
-    public function actionNilaiwarid($resultId) {
-        $result = $this->getNilaiwarid($resultId, true);
+    public function actionNilaiwarid($testtakerId, $deliveryId) {
+        $result = $this->getNilaiwarid($testtakerId, $deliveryId, true);
         echo '<pre>';
         print_r($result);
         ob_end_clean();
@@ -149,7 +170,7 @@ class WaridController extends \yii\web\Controller
                 return 't';
         }
     }
-    public function getNilaiwarid($resultId, $debug) {
+    public function getNilaiwarid($testtakerId, $deliveryId, $debug) {
 
 
         $cfit1_total = 0;
@@ -189,7 +210,7 @@ class WaridController extends \yii\web\Controller
         ob_end_clean();
         ob_start();
 
-        $output = $this->curlResult($resultId);
+        $output = $this->curlResult($testtakerId, $deliveryId);
 
         $questions['cfit1'] = 13;
         $questions['cfit2'] = 14;
@@ -572,12 +593,12 @@ class WaridController extends \yii\web\Controller
         return $ret;
 
     }
-    public function actionDebugresult($resultId)
+    public function actionDebugresult($testtakerId, $deliveryId)
     {
         ob_end_clean();
         ob_start();
 
-        $output = $this->curlResult($resultId);
+        $output = $this->curlResult($testtakerId, $deliveryId);
 
 
 //        echo $output;
@@ -617,14 +638,14 @@ class WaridController extends \yii\web\Controller
         }
 
     }
-    public function actionGetlatestresult($resultId)
+    public function actionGetlatestresult($testtakerId, $deliveryId)
     {
 
         ob_end_clean();
         ob_start();
 
 
-        $output = $this->curlResult($resultId);
+        $output = $this->curlResult($testtakerId, $deliveryId);
 
         /*        $output = "<?xml version='1.0' encoding='UTF-8'?>" . $output;*/
         \Yii::$app->response->format = \yii\web\Response::FORMAT_XML;
