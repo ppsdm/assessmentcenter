@@ -4,6 +4,9 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 
+echo '<h1>';
+echo $deliveryModel->delivery_name;
+echo '</h1>';
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [

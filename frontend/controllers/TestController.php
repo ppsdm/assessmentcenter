@@ -8,12 +8,20 @@ use frontend\models\TestSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Twilio\Rest\Client;
+use Twilio\Jwt\AccessToken;
+use Twilio\Jwt\Grants\VideoGrant;
 
 /**
  * TestController implements the CRUD actions for Test model.
  */
 class TestController extends Controller
 {
+    protected $sid;
+    protected $token;
+    protected $key;
+    protected $secret;
+
     /**
      * {@inheritdoc}
      */
@@ -28,6 +36,22 @@ class TestController extends Controller
             ],
         ];
     }
+
+
+
+    public function init()
+    {
+        parent::init();
+
+        // ... initialization after configuration is applied
+
+        $this->sid = Yii::$app->params['sid'];
+        $this->token = Yii::$app->params['token'];
+        $this->key = Yii::$app->params['key'];
+        $this->secret = Yii::$app->params['secret'];
+    }
+
+
 
     /**
      * Lists all Test models.
@@ -124,4 +148,36 @@ class TestController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+    public function actionTwilio()
+    {
+//        echo 'this is twilio<hr/>';
+
+
+        $rooms = [];
+        try {
+            $client = new Client($this->sid, $this->token);
+            $allRooms = $client->video->rooms->read([]);
+
+            $rooms = array_map(function($room) {
+                return $room->uniqueName;
+            }, $allRooms);
+
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+//        return view('index', ['rooms' => $rooms]);
+
+        ob_end_clean();
+        ob_start();
+        echo '<pre>';
+print_r($allRooms);
+//return $allRooms[0];
+    }
+
+
+
+
+
+
 }
