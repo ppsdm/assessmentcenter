@@ -259,13 +259,13 @@ class VideochatController extends Controller
             ->recordings
             ->read([], 20);
 
-        foreach ($recordings as $record) {
-            if ($record->type == 'video')
-             echo Html::a($record->type . ' : ' .$record->links['media'], ['videochat/composerecording', 'id' => $id]);
-//            print($record->links['media']);
-            echo '<br/>';
-
-        }
+//        foreach ($recordings as $record) {
+//            if ($record->type == 'video')
+//             echo Html::a($record->type . ' : ' .$record->links['media'], ['videochat/composerecording', 'id' => $id]);
+////            print($record->links['media']);
+//            echo '<br/>';
+//
+//        }
 
         echo '<hr/>Composition <br/>';
 
