@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Join',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::a('Join', ['videochat/userjoin', 'id' => $model->id, 'identity' => 'admin']);
+                    return Html::a('Join', ['videochat/userjoin', 'id' => $model->id, 'identity' => 'user']);
                 }
             ],
 
