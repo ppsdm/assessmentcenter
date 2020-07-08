@@ -31,7 +31,7 @@ Twilio.Video.createLocalTracks({
     
     $( '#complete' ).click(function() {
 //       alert('Chat is completed');
-window.location.href='index.php/videochat/completeroom&id=$roomId';
+window.location.href='completeroom?id=$roomId';
 });
        console.log('Successfully joined a Room: ', room.name);
 

@@ -30,9 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'roomname',
             'roomId',
-            'start_time',
-            'end_time',
-            'type',
+//            'start_time',
+//            'end_time',
+//            'type',
+            'duration',
             //'options:ntext',
             'status',
             [

@@ -235,8 +235,13 @@ class VideochatController extends Controller
         $videochat = Videochat::findOne($id);
         $twilio = new Client($this->sid, $this->token);
 
+        $existingroom = $twilio->video->v1->rooms($videochat->roomname)
+            ->fetch();
+
+//        print($room->uniqueName);
+
         try {
-            $room = $twilio->video->v1->rooms($videochat->roomId)
+            $room = $twilio->video->v1->rooms($existingroom->sid)
                 ->update("completed");
 
             $videochat->status = $room->status;
@@ -259,13 +264,13 @@ class VideochatController extends Controller
             ->recordings
             ->read([], 20);
 
-//        foreach ($recordings as $record) {
-//            if ($record->type == 'video')
-//             echo Html::a($record->type . ' : ' .$record->links['media'], ['videochat/composerecording', 'id' => $id]);
-////            print($record->links['media']);
-//            echo '<br/>';
-//
-//        }
+        foreach ($recordings as $record) {
+            if ($record->type == 'video')
+             echo Html::a($record->type . ' : ' .$record->links['media'], ['videochat/composerecording', 'id' => $id]);
+//            print($record->links['media']);
+            echo '<br/>';
+
+        }
 
         echo '<hr/>Composition <br/>';
 
@@ -312,14 +317,15 @@ class VideochatController extends Controller
                 'format' => 'mp4'
             ]);
             echo '<pre>';
+            echo 'start processing composition';
             print_r($composition->links);
 //        $response = $twilio->request("GET", $composition->links['media']);
 ////        $mediaLocation = $response->getContent()["redirect_to"];
 //        print_r($response);
         } else {
-            echo 'sudah ada<br/>';
+            echo 'please wait until status "completed" <br/>';
                     foreach ($compositions as $c) {
-            echo $c->url . ' : ' . $c->status;
+            echo $c->links['media'] . ' : ' . $c->status;
             echo '<br/>';
         }
         }
