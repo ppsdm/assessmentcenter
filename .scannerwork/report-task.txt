@@ -1,0 +1,6 @@
+projectKey=assessment_center
+serverUrl=http://54.255.79.196:9000
+serverVersion=8.4.1.35646
+dashboardUrl=http://54.255.79.196:9000/dashboard?id=assessment_center
+ceTaskId=AXNq2oiSqcSHBC5mvY97
+ceTaskUrl=http://54.255.79.196:9000/api/ce/task?id=AXNq2oiSqcSHBC5mvY97

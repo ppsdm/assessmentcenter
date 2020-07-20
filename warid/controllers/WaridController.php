@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use Twilio\Rest\Client;
 class WaridController extends \yii\web\Controller
 {
+
     public function actionIndex($id)
     {
 //        $searchModel = new ProjectSearch();
@@ -38,6 +39,7 @@ class WaridController extends \yii\web\Controller
 //            'searchModel' => $searchModel,
             'deliveryModel' => $taodelivery,
             'dataProvider' => $dataProvider,
+            'id' => $id
         ]);
     }
     public function actionTwiliocreate()
@@ -173,12 +175,12 @@ class WaridController extends \yii\web\Controller
 
     }
 
-    public function actionNilaiwarid($testtakerId, $deliveryId) {
+    public function actionNilaiwarid($testtakerId, $deliveryId,$deliveryType) {
         $result = $this->getNilaiwarid($testtakerId, $deliveryId, true);
         echo '<pre>';
         print_r($result);
         ob_end_clean();
-        return $this->render('warid', [
+        return $this->render('deliveryType', [
             'result' => $result,
         ]);
 
