@@ -180,7 +180,7 @@ class WaridController extends \yii\web\Controller
         echo '<pre>';
         print_r($result);
         ob_end_clean();
-        return $this->render('deliveryType', [
+        return $this->render($deliveryType, [
             'result' => $result,
         ]);
 

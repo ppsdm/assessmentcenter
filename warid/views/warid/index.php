@@ -20,7 +20,7 @@ echo GridView::widget([
             'format' => 'raw',
             'value'=>function ($data) use($id) {
 //                return Html::a(['warid/nilaiwarid']);
-                return '<a href="nilaiwarid?testtakerId=' . urlencode( $data->test_taker) .'&deliveryId='.urlencode($data->delivery).'$deliveryType='.$id.'">RESULT</a>';
+                return '<a href="nilaiwarid?testtakerId=' . urlencode( $data->test_taker) .'&deliveryId='.urlencode($data->delivery).'&deliveryType='.$id.'">RESULT</a>';
 //                return;
             },
         ],
