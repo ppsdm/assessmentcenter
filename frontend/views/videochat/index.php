@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Join',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::a('Join as host', ['videochat/hostjoin', 'id' => $model->id]);
+                    return Html::a('Join as host', ['videochat/hostjoin', 'id' => $model->id, 'identity' => 'host']);
                 }
             ],
 
