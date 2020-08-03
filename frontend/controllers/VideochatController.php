@@ -80,6 +80,88 @@ class VideochatController extends Controller
         ]);
     }
 
+    public function actionRoomsallopen()
+    {
+
+        $twilio = new Client($this->sid, $this->token);
+
+        $rooms = $twilio->video->v1->rooms
+            ->read([
+                //    "uniqueName" => "DailyStandup"
+            ], 20);
+//        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        echo '<pre>';
+        foreach ($rooms as $record) {
+            print($record->sid);
+            echo '<br/>';
+            print($record->uniqueName);
+            echo '<br/>';
+            print($record->type);
+            echo '<br/>';
+            print($record->status);
+            echo '<hr/>';
+//            print_r($record);
+        }
+        echo '</pre>';
+    }
+
+    public function actionRoomsbyname($name)
+    {
+
+        $twilio = new Client($this->sid, $this->token);
+
+        $rooms = $twilio->video->v1->rooms
+            ->read([
+                "uniqueName" => $name
+            ], 20);
+
+        foreach ($rooms as $record) {
+            print($record->sid);
+        }
+    }
+
+    public function actionRoombysid()
+    {
+        $twilio = new Client($this->sid, $this->token);
+
+        $rooms = $twilio->video->v1->rooms("RMca8ec27c3b26ac8b4ed140c64039ab0b")
+            ->fetch();
+
+
+
+            print($rooms->sid);
+            echo '<br/>';
+            print($rooms->uniqueName);
+            echo '<br/>';
+            print($rooms->type);
+            echo '<br/>';
+            print($rooms->status);
+            echo '<hr/>';
+
+    }
+    public function actionRoomsbystatus($status)
+    {
+
+                $twilio = new Client($this->sid, $this->token);
+
+        $rooms = $twilio->video->v1->rooms
+            ->read([
+//                "sid" => "RMca8ec27c3b26ac8b4ed140c64039ab0b",
+                "status" => $status,
+            ], 20);
+
+        foreach ($rooms as $record) {
+            print($record->sid);
+            echo '<br/>';
+            print($record->uniqueName);
+            echo '<br/>';
+            print($record->type);
+            echo '<br/>';
+            print($record->status);
+            echo '<hr/>';
+        }
+
+    }
 
     /**
      * Displays a single Videochat model.
@@ -172,7 +254,7 @@ class VideochatController extends Controller
         if (empty($exists)) {
             $response = $client->video->rooms->create([
                 'uniqueName' => $videochat->roomname,
-                'type' => 'group',
+                'type' => $videochat->type,
                 'recordParticipantsOnConnect' => true
             ]);
 //            \Log::debug("created new room: ".$request->roomName);
@@ -192,28 +274,49 @@ class VideochatController extends Controller
 //        ]);
     }
 
-    public function actionModeratorjoin($id,$identity)
+    public function actionHostjoin($id,$identity)
     {
-//        $identity = 'reno';
+
+
+
+
         $videochat = Videochat::findOne($id);
-//        \Log::debug("joined with identity: $identity");
         $token = new AccessToken($this->sid, $this->key, $this->secret, 3600, $identity);
 
+
+        
+        $twilio = new Client($this->sid, $this->token);
+
+        $rooms = $twilio->video->v1->rooms
+            ->read([
+                "uniqueName" => $videochat->roomname
+            ], 20);
+
+        // foreach ($rooms as $record) {
+        //     print($record->sid);
+        // }
+
+if (sizeof($rooms) == 0) {
+    Yii::$app->session->setFlash('warning', $videochat->roomname . " dont exist");
+    return $this->redirect(['index']);
+} else {
         $videoGrant = new VideoGrant();
         $videoGrant->setRoom($videochat->roomname);
 
         $token->addGrant($videoGrant);
 
-//        print_r($token->toJWT());
-        return $this->render('moderator_room', [
+        return $this->render('host_room', [
             'accessToken' => $token->toJWT(), 'roomName' => $videochat->roomname, 'roomId' => $id,
         ]);
 
+}
+
     }
 
-    public function actionUserjoin($id,$identity)
+
+    public function actionUserroom($id, $identity, $username)
     {
-//        $identity = 'reno';
+        //        $identity = 'reno';
         $videochat = Videochat::findOne($id);
 //        \Log::debug("joined with identity: $identity");
         $token = new AccessToken($this->sid, $this->key, $this->secret, 3600, $identity);
@@ -225,7 +328,21 @@ class VideochatController extends Controller
 
 //        print_r($token->toJWT());
         return $this->render('user_room', [
-            'accessToken' => $token->toJWT(), 'roomName' => $videochat->roomname, 'roomId' => $id,
+            'accessToken' => $token->toJWT(), 'roomName' => $videochat->roomname, 'roomId' => $id, 'username' => $username
+        ]);
+    }
+    public function actionUserjoin($id,$identity)
+    {
+
+        if ($_POST)
+        {
+            Yii::$app->session->setFlash('success', "POST " . $_POST['name']);
+            $this->redirect(['userroom', 'id' => $id, 'identity' => $identity, 'username' => $_POST['name']]);
+        } else {
+            Yii::$app->session->setFlash('warning', "no post ");
+        }
+        return $this->render('user_join', [
+//            'id' => $id, 'identity' => $identity
         ]);
 
     }

@@ -17,6 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Create Videochat'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <p>
+        <?= Html::a(Yii::t('app', 'All open rooms'), ['roomsallopen'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Completed Rooms'), ['roomsbystatus', 'status' => 'completed'], ['class' => 'btn btn-success']) ?>
+
+    </p>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -32,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'roomId',
 //            'start_time',
 //            'end_time',
-//            'type',
+            'type',
             'duration',
             //'options:ntext',
             'status',
@@ -54,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Join',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::a('Join', ['videochat/moderatorjoin', 'id' => $model->id, 'identity' => 'admin']);
+                    return Html::a('Join as host', ['videochat/hostjoin', 'id' => $model->id, 'identity' => 'admin']);
                 }
             ],
 

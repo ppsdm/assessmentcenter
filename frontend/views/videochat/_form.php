@@ -20,9 +20,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'end_time')->textInput() ?>
 
-    <?= $form->field($model, 'duration')->textInput() ?>
 
-    <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
+
+    <?php
+    $types = ['group' => 'group', 'group-small' => 'small / p2p'];
+    echo $form->field($model, 'type')->dropDownList(
+        $types,
+        ['prompt'=>'Select...']);
+        ?>
 
     <?= $form->field($model, 'options')->textarea(['rows' => 6]) ?>
 
