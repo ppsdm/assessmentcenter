@@ -314,7 +314,7 @@ if (sizeof($rooms) == 0) {
     }
 
 
-    public function actionUserroom($id, $identity, $username)
+    public function actionUserroom($id, $identity)
     {
         //        $identity = 'reno';
         $videochat = Videochat::findOne($id);
@@ -328,16 +328,16 @@ if (sizeof($rooms) == 0) {
 
 //        print_r($token->toJWT());
         return $this->render('user_room', [
-            'accessToken' => $token->toJWT(), 'roomName' => $videochat->roomname, 'roomId' => $id, 'username' => $username
+            'accessToken' => $token->toJWT(), 'roomName' => $videochat->roomname, 'roomId' => $id
         ]);
     }
-    public function actionUserjoin($id,$identity)
+    public function actionUserjoin($id)
     {
 
         if ($_POST)
         {
             Yii::$app->session->setFlash('success', "POST " . $_POST['name']);
-            $this->redirect(['userroom', 'id' => $id, 'identity' => $identity, 'username' => $_POST['name']]);
+            $this->redirect(['userroom', 'id' => $id, 'identity' => $_POST['name']]);
         } else {
             Yii::$app->session->setFlash('warning', "no post ");
         }
