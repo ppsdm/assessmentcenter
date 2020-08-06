@@ -64,24 +64,6 @@ class WaridController extends \yii\web\Controller
         echo '</pre>';
         }
 
-    public function actionTwilioread()
-    {
-// Your Account SID and Auth Token from twilio.com/console
-        $sid = 'ACc08adc757aeb79271f3c751e6b8f8f3d';
-        $token = 'e5adee7bfde4ed8fef0e84c2c8a2d2bd';
-        $twilio = new Client($sid, $token);
-
-
-        $rooms = $twilio->video->v1->rooms
-            ->read(["uniqueName" => "DailyStandup"], 20);
-
-        echo '<pre/>';
-        foreach ($rooms as $record) {
-            print_r($record);
-        }
-    }
-
-
     public function actionTestpdf()
     {
 
