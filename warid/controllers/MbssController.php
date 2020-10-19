@@ -16,9 +16,9 @@ class MbssController extends \yii\web\Controller
     public function actionResult($testtakerId, $deliveryId, $deliveryType)
     {
 
-        $result = $this->getResult($testtakerId, $deliveryId, true);
-//        echo '<pre>';
-//        print_r($result);
+        $result = $this->getResult($testtakerId, $deliveryId, false);
+        echo '<pre>';
+        print_r($result);
 //        ob_end_clean();
 //        return $this->render($deliveryType, [
 //            'result' => $result,
@@ -92,6 +92,19 @@ class MbssController extends \yii\web\Controller
         $answered['adkudag4'] = 0;
         $answered['tese'] = 0;
 
+        $pcas_aspect_array = [];
+        $pcas_aspect_array['a'] = 0;
+        $pcas_aspect_array['b'] = 0;
+        $pcas_aspect_array['c'] = 0;
+        $pcas_aspect_array['d'] = 0;
+        $pcas_aspect_array['e'] = 0;
+        $pcas_aspect_array['f'] = 0;
+        $pcas_aspect_array['g'] = 0;
+        $pcas_aspect_array['h'] = 0;
+        $pcas_aspect_array['i'] = 0;
+        $pcas_aspect_array['j'] = 0;
+
+
 //        echo $output;
         $ret['biodata']['nama'] = '';
         $ret['biodata']['pendidikan'] = '';
@@ -102,11 +115,11 @@ class MbssController extends \yii\web\Controller
         $ret['biodata']['kelas'] = '';
 
         $items=simplexml_load_string($output) or die("Error: Cannot create object");
-//
+////
         foreach($items as $item_key => $item_value) {
 //            echo $item_key;
-            echo $item_value->attributes()->identifier;
-            echo '<br/>';
+//            echo $item_value->attributes()->identifier;
+//            echo '<br/>';
 
                 foreach ($item_value as $item2_key => $item2_value) {
 
@@ -116,22 +129,22 @@ class MbssController extends \yii\web\Controller
 
                         if(strpos($item_value->attributes()->identifier, 'fit_1')) {
                             $cfit1_total = $cfit1_total + $item2_value->value;
-                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
                         }
 
                         if(strpos($item_value->attributes()->identifier, 'fit_2')) {
                             $cfit2_total = $cfit2_total + $item2_value->value;
-                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
                         }
 
                         if(strpos($item_value->attributes()->identifier, 'fit_3')) {
                             $cfit3_total = $cfit3_total + $item2_value->value;
-                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
                         }
 
                         if(strpos($item_value->attributes()->identifier, 'fit_4')) {
                             $cfit4_total = $cfit4_total + $item2_value->value;
-                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->value;
                         }
 
 
@@ -143,18 +156,42 @@ class MbssController extends \yii\web\Controller
                 } elseif ( $item2_key == 'responseVariable') {
 
                     if(strpos($item_value->attributes()->identifier, 'ISC_')) {
-                        $cfit4_total = $cfit4_total + $item2_value->value;
-                        echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->candidateResponse->value;
+
+                        if(strpos($item2_value->attributes()->identifier, 'ESPON')) {
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->candidateResponse->value;
+//                            echo ' ++ ' . substr($item2_value->candidateResponse->value,0,1);
+                            if (substr($item2_value->candidateResponse->value,0,1) == 'M') {
+//                                echo ' !! ' . substr($item2_value->candidateResponse->value,2,1);
+                                $pcas_aspect_array[strtolower(substr($item2_value->candidateResponse->value,2,1))]++;
+                            } else if (substr($item2_value->candidateResponse->value,0,1) == 'L') {
+//                                echo ' ?? ' . substr($item2_value->candidateResponse->value,3,1);
+                                $pcas_aspect_array[strtolower(substr($item2_value->candidateResponse->value,2,1))]++;
+                            }
+//                            echo '<br/>';
+                        }
+                        if(strpos($item2_value->attributes()->identifier, 'ISC_')) {
+//                            echo ' - ' . ($item2_key) . ' : ' . $item2_value->attributes()->identifier . ' => ' . $item2_value->candidateResponse->value;
+//                            echo ' ++ ' . substr($item2_value->candidateResponse->value,0,1);
+                            if (substr($item2_value->candidateResponse->value,0,1) == 'M') {
+//                                echo ' !! ' . substr($item2_value->candidateResponse->value,2,1);
+                                $pcas_aspect_array[strtolower(substr($item2_value->candidateResponse->value,2,1))]++;
+                            } else if (substr($item2_value->candidateResponse->value,0,1) == 'L') {
+//                                echo ' ?? ' . substr($item2_value->candidateResponse->value,3,1);
+                                $pcas_aspect_array[strtolower(substr($item2_value->candidateResponse->value,2,1))]++;
+                            }
+//                            echo '<br/>';
+                        }
+
                     }
 
 //
 
                 }
-                echo '<br/>';
+//                echo '<br/>';
 
                 }
 
-            echo '<hr/>';
+//            echo '<hr/>';
 
 
         }
@@ -162,18 +199,27 @@ class MbssController extends \yii\web\Controller
 
 //echo '<pre>';
 //print_r($items);
-//
+
+
+        $ret['result']['cfit1'] = $cfit1_total;
+        $ret['result']['cfit2'] = $cfit2_total;
+        $ret['result']['cfit3'] = $cfit3_total;
+        $ret['result']['cfit4'] = $cfit4_total;
+
+        $ret['result']['disc'] = $pcas_aspect_array;
         if ($debug) {
-            echo '<hr/>';
+//            echo '<hr/>';
             echo '<br/>CFIT 1 : ' . $cfit1_total;
             echo '<br/>CFIT 2 : ' . $cfit2_total;
             echo '<br/>CFIT 3 : ' . $cfit3_total;
             echo '<br/>CFIT 4 : ' . $cfit4_total;
+            echo '<pre>';
+            print_r($pcas_aspect_array);
+                echo '</pre>';
         }
         return $ret;
 
     }
-
 
     private function curlResult($testtakerId, $deliveryId) {
         $curl = new curl\Curl();
@@ -189,7 +235,7 @@ class MbssController extends \yii\web\Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Authorization: Basic YWRtaW46YWRtaW4xMjMj',
+            'Authorization: Basic YWRtaW5hcGk6YWRtaW4xMjMj', //base64 encoding
             'Accept: application/json'
         ));
 
