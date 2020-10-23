@@ -1,0 +1,56 @@
+Message-ID: <6e36d29178a7b7694a4794d4c03a8faa@localhost>
+Date: Mon, 19 Oct 2020 07:51:37 +0200
+Subject: Password reset for Project template
+From: Project template robot <support@example.com>
+To: renowijoyo@gmail.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_1603086697_02764f9f9ed89d4feef59c87b1970ae0_=_"
+
+
+--_=_swift_1603086697_02764f9f9ed89d4feef59c87b1970ae0_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+Hello renowijoyo,
+
+Follow the link below to reset your password:
+=
+
+http://localhost/assessmentcenter/project/web/index.php/site/reset-passw=
+ord?token=3DRXiqtk4EFuVrZK1FbetQLPHHbaLKzvgM_1603086697
+
+--_=_swift_1603086697_02764f9f9ed89d4feef59c87b1970ae0_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/=
+xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/ht=
+ml; charset=3DUTF-8" />
+    <title></title>
+    </head>
+<body>
+    =
+    <div class=3D"password-reset">
+    <p>Hello renowijoyo,</p>
+
+    =
+<p>Follow the link below to reset your password:</p>
+
+    <p><a href=3D=
+"http://localhost/assessmentcenter/project/web/index.php/site/reset-passwor=
+d?token=3DRXiqtk4EFuVrZK1FbetQLPHHbaLKzvgM_1603086697">http://localhost/ass=
+essmentcenter/project/web/index.php/site/reset-password?token=3DRXiqtk4EFuV=
+rZK1FbetQLPHHbaLKzvgM_1603086697</a></p>
+</div>
+    </body>
+</html>=
+
+
+
+--_=_swift_1603086697_02764f9f9ed89d4feef59c87b1970ae0_=_--
