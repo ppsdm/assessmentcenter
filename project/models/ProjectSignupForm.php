@@ -57,9 +57,12 @@ class ProjectSignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+
         return $user->save()
 //            && $this->sendEmail($user)
             ;
+
+
 
     }
 

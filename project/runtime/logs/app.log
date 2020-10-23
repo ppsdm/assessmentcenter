@@ -4569,6 +4569,7 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1602899134.1422
     'REQUEST_TIME' => 1602899134
 ]
+<<<<<<< HEAD
 2020-10-17 04:19:23 [::1][-][pcc1je3b8skcv0rt7lej2ggf09][error][yii\db\Exception] PDOException: SQLSTATE[HY000] [1049] Unknown database 'assessmentcenterdb' in C:\xampp72\htdocs\assessmentcenter\vendor\yiisoft\yii2\db\Connection.php:705
 Stack trace:
 #0 C:\xampp72\htdocs\assessmentcenter\vendor\yiisoft\yii2\db\Connection.php(705): PDO->__construct('mysql:host=loca...', 'root', '', NULL)
@@ -16640,3 +16641,5 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1603253972.415
     'REQUEST_TIME' => 1603253972
 ]
+=======
+>>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5

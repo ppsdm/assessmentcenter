@@ -1,0 +1,56 @@
+Message-ID: <6ccacfaf258139818339167f780d0365@localhost>
+Date: Sat, 17 Oct 2020 04:04:55 +0200
+Subject: Account registration at Project template
+From: Project template robot <support@example.com>
+To: ninajonathans@gmail.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_1602900295_4dcdaba1fc266fd764cef059418f6c28_=_"
+
+
+--_=_swift_1602900295_4dcdaba1fc266fd764cef059418f6c28_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+Hello ninajonathans@gmail.com,
+
+Follow the link below to verify your=
+ email:
+
+http://localhost/assessmentcenter/project/web/index.php/site/v=
+erify-email?token=3D9sQjK5R1w7xkbsyAk5039lTtR34Hi_ac_1602900295
+
+--_=_swift_1602900295_4dcdaba1fc266fd764cef059418f6c28_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/=
+xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/ht=
+ml; charset=3DUTF-8" />
+    <title></title>
+    </head>
+<body>
+    =
+    <div class=3D"verify-email">
+    <p>Hello ninajonathans@gmail.com,</p=
+>
+
+    <p>Follow the link below to verify your email:</p>
+
+    <p><=
+a href=3D"http://localhost/assessmentcenter/project/web/index.php/site/veri=
+fy-email?token=3D9sQjK5R1w7xkbsyAk5039lTtR34Hi_ac_1602900295">http://localh=
+ost/assessmentcenter/project/web/index.php/site/verify-email?token=3D9sQjK5=
+R1w7xkbsyAk5039lTtR34Hi_ac_1602900295</a></p>
+</div>
+    </body>
+</ht=
+ml>
+
+
+--_=_swift_1602900295_4dcdaba1fc266fd764cef059418f6c28_=_--

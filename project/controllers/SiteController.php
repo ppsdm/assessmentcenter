@@ -1,6 +1,7 @@
 <?php
 namespace project\controllers;
 
+
 //use frontend\models\ResendVerificationEmailForm;
 use project\models\ProjectUser;
 use project\models\TaoUser;
@@ -11,17 +12,16 @@ use project\models\ProjectResendVerificationEmailForm;
 use project\models\ProjectResetPasswordForm;
 use project\models\ProjectSignupForm;
 use project\models\ProjectUserSearch;
+
+
+
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-//use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
+
 
 /**
  * Site controller
@@ -30,6 +30,7 @@ class SiteController extends Controller
 {
 
     public $project_id = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -85,6 +86,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
 
+
 //        echo 'index';
         if (!Yii::$app->user->isGuest) {
             return $this->render('index');
@@ -110,6 +112,7 @@ class SiteController extends Controller
             && $model->login()
 
         ) {
+
             return $this->goBack();
         } else {
             $model->password = '';
@@ -120,7 +123,6 @@ class SiteController extends Controller
         }
     }
 
-
     /**
      * Logs out the current user.
      *
@@ -128,6 +130,7 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+
 
         Yii::$app->user->logout();
         Yii::$app->session->setFlash('warning', 'You are logged out ');
@@ -174,6 +177,7 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+
         $newUser = new TaoUser();
 
         if ($newUser->load(Yii::$app->request->post())
@@ -207,7 +211,6 @@ class SiteController extends Controller
             ['model' => $newUser,
             ]);
 
-
     }
 
     /**
@@ -217,8 +220,10 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+
         $model = new ProjectPasswordResetRequestForm();
         $model->project_id = $this->project_id;
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
@@ -244,10 +249,13 @@ class SiteController extends Controller
     public function actionResetPassword($token)
     {
         try {
+
             $model = new ProjectResetPasswordForm($token);
+
         } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
+
 
 //        echo '<pre/>';
 //        print_r($model);
@@ -268,7 +276,6 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
 
     /**
      * Resend verification email
