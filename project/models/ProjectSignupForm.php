@@ -13,7 +13,7 @@ class ProjectSignupForm extends Model
     public $username;
     public $email;
     public $password;
-    public $project_id;
+//    public $project_id;
 
 
     /**
@@ -31,11 +31,11 @@ class ProjectSignupForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            [['email','username','project_id'], 'unique', 'targetClass' => '\project\models\ProjectUser', 'targetAttribute' => ['email','username','project_id'],'message' => 'This email,username,project has already been taken.'],
+            [['email','username'], 'unique', 'targetClass' => '\project\models\ProjectUser', 'targetAttribute' => ['email','username'],'message' => 'This email,username has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            ['project_id', 'trim'],
+//            ['project_id', 'trim'],
         ];
     }
 
@@ -53,7 +53,7 @@ class ProjectSignupForm extends Model
         $user = new ProjectUser();
         $user->username = $this->username;
         $user->email = $this->email;
-        $user->project_id = $this->project_id;
+//        $user->project_id = $this->project_id;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();

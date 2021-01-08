@@ -3,7 +3,9 @@ namespace project\controllers;
 
 
 //use frontend\models\ResendVerificationEmailForm;
+use project\models\Project;
 use project\models\ProjectUser;
+use project\models\TaoGroup;
 use project\models\TaoUser;
 use frontend\models\VerifyEmailForm;
 use project\models\ProjectLoginForm;
@@ -17,6 +19,7 @@ use project\models\ProjectUserSearch;
 
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -26,10 +29,10 @@ use yii\filters\AccessControl;
 /**
  * Site controller
  */
-class SiteController extends Controller
+class AdminController extends Controller
 {
 
-//    public $project_id = 1;
+    public $project_id = 1;
 
     /**
      * {@inheritdoc}
@@ -192,9 +195,7 @@ class SiteController extends Controller
 
                 $user = $this->createNewUser($newUser);
                 //add tao user ID with project user id
-                $projectnewuser = ProjectUser::find()
-//                    ->andWhere(['project_id' => $this->project_id])
-                    ->andWhere(['username' => $newUser->username])->One();
+                $projectnewuser = ProjectUser::find()->andWhere(['project_id' => $this->project_id])->andWhere(['username' => $newUser->username])->One();
                 if ($user) {
                     $newUser->user_id = $projectnewuser->id;
                     $newUser->save();
@@ -224,7 +225,7 @@ class SiteController extends Controller
     {
 
         $model = new ProjectPasswordResetRequestForm();
-//        $model->project_id = $this->project_id;
+        $model->project_id = $this->project_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -375,7 +376,7 @@ class SiteController extends Controller
         $model->username = $newUser->username;
         $model->email = $newUser->username;
         $model->password = $newUser->password;
-//        $model->project_id = '1'; #untuk project kemeninfo
+        $model->project_id = '1'; #untuk project kemeninfo
 
         if ($usermodel = $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
@@ -393,7 +394,7 @@ class SiteController extends Controller
     {
         $searchModel = new ProjectUserSearch();
         $params = Yii::$app->request->queryParams;
-//        $params['ProjectUserSearch']['project_id'] = $this->project_id;
+        $params['ProjectUserSearch']['project_id'] = $this->project_id;
         $dataProvider = $searchModel->search($params);
 //       echo 'index';
 
@@ -436,6 +437,62 @@ class SiteController extends Controller
     }
 
 
+    public function actionProjects()
+    {
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => Project::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('projects', [
+//            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+    public function actionUsers()
+    {
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => ProjectUser::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('users', [
+//            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+public function actionUserview($id)
+{
+    echo $id;
+}
+    public function actionTaogroups()
+    {
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => TaoGroup::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('taogroups', [
+//            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     public function actionGroup()
     {
 $uri = "";

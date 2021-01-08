@@ -12,7 +12,7 @@ use project\models\ProjectUser;
 class ProjectPasswordResetRequestForm extends Model
 {
     public $email;
-    public $project_id;
+//    public $project_id;
 
 
     /**
@@ -26,7 +26,7 @@ class ProjectPasswordResetRequestForm extends Model
             ['email', 'email'],
             ['email', 'exist',
                 'targetClass' => '\project\models\ProjectUser',
-                'filter' => ['status' => ProjectUser::STATUS_ACTIVE, 'project_id' => $this->project_id],
+                'filter' => ['status' => ProjectUser::STATUS_ACTIVE],
                 'message' => 'There is no user with this email address.'
             ],
         ];
@@ -42,7 +42,7 @@ class ProjectPasswordResetRequestForm extends Model
         /* @var $user User */
         $user = ProjectUser::findOne([
             'status' => ProjectUser::STATUS_ACTIVE,
-            'project_id' => $this->project_id,
+//            'project_id' => $this->project_id,
             'email' => $this->email,
         ]);
 

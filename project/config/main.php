@@ -20,11 +20,9 @@ return [
             'csrfParam' => '_csrf-project',
         ],
         'user' => [
-<<<<<<< HEAD
+
             'identityClass' => 'project\models\ProjectUser',
-=======
-            'identityClass' => 'common\models\User',
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-project', 'httpOnly' => true],
         ],
@@ -54,7 +52,7 @@ return [
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ],
         ],
-<<<<<<< HEAD
+
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'useFileTransport' => false,
@@ -67,8 +65,6 @@ return [
                 'password' => 'RAN4ever#',
             ],
         ],
-=======
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
 
     ],
     'params' => $params,

@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"template":"default","enableI18N":"1","messageCategory":"app","ns":"project\\models","db":"db","baseClass":"yii\\db\\ActiveRecord","generateRelations":"all","generateLabelsFromComments":"1","queryNs":"project\\models","queryBaseClass":"yii\\db\\ActiveQuery","useTablePrefix":"0","generateQuery":"1"}
-=======
-{"template":"default","enableI18N":"1","messageCategory":"app","ns":"app\\models","db":"db","baseClass":"yii\\db\\ActiveRecord","generateRelations":"all","generateLabelsFromComments":"0","queryNs":"app\\models","queryBaseClass":"yii\\db\\ActiveQuery","useTablePrefix":"0","generateQuery":"1"}
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+{"template":"default","enableI18N":"1","messageCategory":"app","ns":"project\\models","db":"db","baseClass":"yii\\db\\ActiveRecord","generateRelations":"all","generateLabelsFromComments":"0","queryNs":"project\\models","queryBaseClass":"yii\\db\\ActiveQuery","useTablePrefix":"0","generateQuery":"1"}

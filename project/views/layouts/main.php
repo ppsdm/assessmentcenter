@@ -30,18 +30,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
 
-<<<<<<< HEAD
 
-=======
-    $isAssessor = false;
-    if (!Yii::$app->user->isGuest) {
-        $userProfile = \frontend\models\UserProfile::find()->andWhere(['userId' => Yii::$app->user->identity->id])->One();
-        $numberOfAssessorRoles = Assessor::find()->andWhere(['profileId' => $userProfile->profileId])->All();
-        if (sizeof($numberOfAssessorRoles) > 0) {
-            $isAssessor = true;
-        }
-    }
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
 //    echo '<br/><br/><br/>dasdadsa ' . $userProfile->profileId;
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
@@ -52,19 +42,16 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-<<<<<<< HEAD
+
 //        ['label' => 'About', 'url' => ['/site/about']],
 //        ['label' => 'Contact', 'url' => ['/site/contact']],
-=======
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-<<<<<<< HEAD
+
 
 
 //        $menuItems[] = ['label' => 'Profile', 'url' => ['/site/profile']];
@@ -72,17 +59,7 @@ AppAsset::register($this);
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
                 'Logout',
-=======
-        if ($isAssessor) {
-            $menuItems[] = ['label' => 'Assessor Page', 'url' => ['/assessor']];
-        }
 
-        $menuItems[] = ['label' => 'Profile', 'url' => ['/profile/index']];
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()

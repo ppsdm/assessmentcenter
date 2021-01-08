@@ -2,24 +2,21 @@
 namespace project\models;
 
 use Yii;
-<<<<<<< HEAD
+
 use yii\base\InvalidValueException;
-=======
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-<<<<<<< HEAD
+
 use yii\web\UserEvent;
-=======
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
 
 /**
  * Project User model
  *
  * @property int $id
- * @property int|null $project_id
  * @property string $username
  * @property string $password_hash
  * @property string $password_reset_token
@@ -37,13 +34,12 @@ class ProjectUser extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
-<<<<<<< HEAD
+
     const EVENT_BEFORE_LOGIN = 'beforeLogin';
     const EVENT_AFTER_LOGIN = 'afterLogin';
     const EVENT_BEFORE_LOGOUT = 'beforeLogout';
     const EVENT_AFTER_LOGOUT = 'afterLogout';
-=======
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
 
     /**
      * {@inheritdoc}
@@ -70,8 +66,8 @@ class ProjectUser extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['project_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            [[ 'status', 'created_at', 'updated_at'], 'integer'],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -98,15 +94,10 @@ class ProjectUser extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-<<<<<<< HEAD
-    public static function findByUsername($username,$project_id)
-    {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE, 'project_id' => $project_id]);
-=======
+
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
     }
 
     /**
@@ -233,7 +224,7 @@ class ProjectUser extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-<<<<<<< HEAD
+
     protected function beforeLogin($identity, $cookieBased, $duration)
     {
         $event = new UserEvent([
@@ -341,6 +332,5 @@ class ProjectUser extends ActiveRecord implements IdentityInterface
         ]));
         Yii::$app->getResponse()->getCookies()->add($cookie);
     }
-=======
->>>>>>> 09a1fde98ba856c6c0f885341e7d1ff18dd460d5
+
 }

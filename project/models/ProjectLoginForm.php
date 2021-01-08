@@ -11,7 +11,7 @@ class ProjectLoginForm extends Model
 {
     public $username;
     public $password;
-    public $project_id;
+//    public $project_id;
     public $rememberMe = true;
 
     private $_user;

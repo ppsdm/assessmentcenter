@@ -17,7 +17,7 @@ class ProjectUserSearch extends ProjectUser
     public function rules()
     {
         return [
-            [['id', 'project_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
         ];
     }
@@ -59,7 +59,6 @@ class ProjectUserSearch extends ProjectUser
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'project_id' => $this->project_id,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
