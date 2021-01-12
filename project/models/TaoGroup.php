@@ -87,7 +87,7 @@ class TaoGroup extends \yii\db\ActiveRecord
      */
     public function getTaoUsers()
     {
-        return $this->hasMany(Taouser::className(), ['id' => 'tao_user_id'])->viaTable('tao_user_group', ['tao_group_id' => 'id']);
+        return $this->hasMany(ProjectTaouser::className(), ['id' => 'tao_user_id'])->viaTable('tao_user_group', ['tao_group_id' => 'id']);
     }
 
     /**

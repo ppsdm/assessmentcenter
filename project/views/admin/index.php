@@ -1,16 +1,17 @@
+<?php
+
+use yii\helpers\Html;
+
+?>
 <div class="project-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+    <h1>Admin Main Page</h1>
+
 </div>
 
 <?php
-
+echo '<h1>';
+echo Html::a(Yii::t('app', 'Projects'), ['projects'], ['class' => 'btn btn-primary']);
+echo '</h1><h1>';
+echo Html::a(Yii::t('app', 'Users'), ['users'], ['class' => 'btn btn-primary']);
+echo '</h1>';
 ?>

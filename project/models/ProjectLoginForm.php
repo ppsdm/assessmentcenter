@@ -75,7 +75,7 @@ class ProjectLoginForm extends Model
      *
      * @return User|null
      */
-    protected function getUser()
+    public function getUser()
     {
         if ($this->_user === null) {
             $this->_user = ProjectUser::findByUsername($this->username, 2);

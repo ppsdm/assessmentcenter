@@ -3,9 +3,16 @@ namespace project\controllers;
 
 
 //use frontend\models\ResendVerificationEmailForm;
+use frontend\models\Profile;
+use frontend\models\SignupForm;
+use project\models\Project;
+use project\models\ProjectGroup;
+use project\models\ProjectTaouser;
 use project\models\ProjectUser;
+use project\models\ProjectUserProfile;
+use project\models\ProjectUserProject;
 use project\models\TaoUser;
-use frontend\models\VerifyEmailForm;
+use project\models\VerifyEmailForm;
 use project\models\ProjectLoginForm;
 use project\models\ProjectPasswordResetRequestForm;
 use project\models\ProjectResendVerificationEmailForm;
@@ -17,6 +24,7 @@ use project\models\ProjectUserSearch;
 
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -170,14 +178,38 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+
+    public function actionSignup()
+    {
+        $newUser = new TaoUser();
+
+        if ($newUser->load(Yii::$app->request->post())
+        ) {
+            $user = $this->createNewUser($newUser);
+            //add tao user ID with project user id
+            $projectnewuser = ProjectUser::find()
+//                    ->andWhere(['project_id' => $this->project_id])
+                ->andWhere(['username' => $newUser->username])->One();
+            if ($user) {
+                $newUser->user_id = $projectnewuser->id;
+                $newUser->save();
+//                    $taoUser->user_id = $user->id;
+                Yii::$app->session->setFlash('success', $newUser->username);
+            }
+        }
+
+        return $this->render('signup',
+            ['model' => $newUser,
+            ]);
+
+    }
     /**
      * Signs user up.
      *
      * @return mixed
      */
-    public function actionSignup()
+    public function actionSignupNEW()
     {
-
         $newUser = new TaoUser();
 
         if ($newUser->load(Yii::$app->request->post())
@@ -262,7 +294,7 @@ class SiteController extends Controller
 //        echo '<pre/>';
 //        print_r($model);
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            $uri = TaoUser::find()->andWhere(['user_id' => $model->id])->One();
+            $uri = ProjectTaouser::find()->andWhere(['user_id' => $model->id])->One();
             $success = $this->changeTaoPassword($uri->user_uri,$model->password);
             if ($success) {
                 Yii::$app->session->setFlash('success', 'New password saved.');
@@ -302,18 +334,15 @@ class SiteController extends Controller
 //        ]);
     }
 
-    public function actionTest()
-    {
-        echo 'test';
-    }
+
 
     private function createNewTaoUser($newUser)
     {
         $getUrl = Yii::$app->params['tao_base_url'] . '/taoTestTaker/api/testTakers?'
             . 'login='.$newUser->username
 //            . '&label='.$newUser->first_name . ' ' . $newUser->last_name
-            . '&firstName='.$newUser->first_name
-            . '&lastName='.$newUser->last_name
+//            . '&firstName='.(property_exists($newUser,'first_name')) ? $newUser->first_name   : ""
+//            . '&lastName='.(property_exists($newUser,'last_name')) ? $newUser->first_name   : ""
             .'&password='.$newUser->password
             .'&mail='.$newUser->username
             .'&userLanguage=English';
@@ -334,29 +363,30 @@ class SiteController extends Controller
         $taoUser = json_decode($apiResponse);
         if ($taoUser->success) {
 
-            $exist = TaoUser::find()->andWhere(['user_uri' => $taoUser->uri])->One();
+//            $exist = ProjectTaouser::find()->andWhere(['user_uri' => $taoUser->uri])->One();
+            $exist = ProjectTaouser::find()->andWhere(['project_user_id' => yii::$app->user->identity->id])->One();
             if (!is_null($exist)) {
+                $exist->username = $newUser->username;
+                $exist->user_uri = $taoUser->uri;
+//                $exist->project_user_id = Yii::$app->user->identity->getId();
                 $exist->save();
-                Yii::$app->session->setFlash('success', $taoUser->uri . 'exist');
+                Yii::$app->session->addFlash('warning', yii::$app->user->identity->username . ' previously existed');
             } else {
-                $newUser->user_uri = $taoUser->uri;
-                if($newUser->save()) {
-                    Yii::$app->session->setFlash('success', $taoUser->uri . 'new');
+                $exist = new ProjectTaouser();
+                $exist->username = $newUser->username;
+                $exist->user_uri = $taoUser->uri;
+                $exist->project_user_id = Yii::$app->user->identity->getId();
+                if($exist->save()) {
+                    Yii::$app->session->addFlash('success', $exist->user_uri . 'new');
                 } else {
-                    Yii::$app->session->setFlash('success', $taoUser->uri . json_encode($newUser->errors));
+                    Yii::$app->session->addFlash('success', $exist->user_uri . json_encode($newUser->errors));
                 }
 
             }
-//                $result = Yii::$app->mailer->compose()
-//                    ->setFrom('renowijoyo@gmail.com')
-//                    ->setTo($newUser->username)
-//                    ->setSubject('New Registrtaion')
-//                    ->setTextBody('Plain text content')
-//                    ->setHtmlBody('<b>Anda telah teregistrasi</b>')
-//                    ->send();
+
 
         } else {
-            Yii::$app->session->setFlash('warning', 'tao error : ' . $taoUser->errorMsg);
+            Yii::$app->session->addFlash('warning', 'tao error : ' . $taoUser->errorMsg);
         }
 
         return $taoUser;
@@ -536,4 +566,184 @@ echo '<pre/>';
         return $taoUser;
 
     }
+
+    /**
+     * Verify email address
+     *
+     * @param string $token
+     * @throws BadRequestHttpException
+     * @return yii\web\Response
+     */
+    public function actionVerifyEmail($token)
+    {
+        try {
+            $model = new VerifyEmailForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if ($user = $model->verifyEmail()) {
+            if (Yii::$app->user->login($user)) {
+                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                return $this->goHome();
+            }
+        }
+
+        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        return $this->goHome();
+    }
+
+
+
+
+    public function actionTaosync()
+    {
+
+        $model = new ProjectLoginForm();
+        if ($model->load(Yii::$app->request->post())
+
+        ) {
+            $model->username = Yii::$app->user->identity->username;
+
+                $user = $model->getUser();
+                if (!$user->validatePassword($model->password)) {
+                    Yii::$app->session->addFlash('error', 'WRONG PASSWORD');
+                    echo 'wrong password';
+                }  else {
+                    Yii::$app->session->addFlash('success', 'Verified');
+
+//                    echo '<pre>';
+//                    print_r($model);
+
+                    $taoUser = $this->createNewTaoUser($model);
+//
+                    if ($taoUser->success)
+                    {
+//                        $changename = $this->changeTaoLabel($user,$taoUser->uri);
+
+//                        $assigntogroup = $this->assignTaoUserToGroup( "https://cat.ppsdm.com/cat.rdf#i1603326718823824000",$taoUser->uri);
+
+                            Yii::$app->session->addFlash('success', $taoUser->uri);
+
+                    } else {
+
+                        /*
+                        yang harus dilakukan disini :
+                        1. get uri from username
+                        2. use the uri and password to change password
+                        */
+//                        $this->changeTaoPassword()
+//                        echo '<pre>';
+//                        print_r($taoUser);
+                        Yii::$app->session->addFlash('danger', 'somthieng wrong ');
+                    }
+                }
+
+            return $this->goBack();
+        } else {
+            $model->password = '';
+
+
+        }
+
+            return $this->render('verifypassword', [
+                'model' => $model,
+            ]);
+
+//        1. check for tao user with the same email
+//        2. create tao user
+//        3. create password
+
+    }
+
+    public function actionProfile()
+    {
+        if (!Yii::$app->user->isGuest) {
+                $id = Yii::$app->user->id;
+
+
+
+            $UserProfileModel = ProjectUserProfile::find()->andWhere(['projectUserId' => $id])->One();
+            $taomodel = ProjectTaouser::find()->andWhere(['project_user_id' => $id])->One();
+            if ( isset($UserProfileModel)){
+                $model = $UserProfileModel->profile;
+            } else {
+                $model = new Profile;
+                $UserProfileModel = new ProjectUserProfile();
+            }
+
+
+            if ( isset($taomodel)){
+
+            } else {
+                $taomodel = new ProjectTaouser;
+
+            }
+
+
+//            $model = $UserProfileModel->profile;
+//            if (null == $UserProfileModel) {
+//                $model = new Profile;
+//                $model->save();
+//                $UserProfileModel = new UserProfile();
+//                $UserProfileModel->userId = $id;
+//                $UserProfileModel->profileId = $model->id;
+//                $UserProfileModel->save();
+//            }
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                $UserProfileModel->profileId = $model->id;
+                $UserProfileModel->projectUserId = $id;
+                $UserProfileModel->save();
+                //  return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('success', 'Profile is saved');
+                return $this->refresh();
+            }
+
+            return $this->render('profile', [
+                'model' => $model,
+                'taomodel' => $taomodel
+            ]);
+        } else {
+            return $this->goHome();
+        }
+    }
+
+    public function actionProjects()
+    {
+
+        $id = Yii::$app->user->id;
+//        $model = ProjectUserProject::find()->andWhere(['project_user_id' => $id])->all();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => ProjectUserProject::find()->andWhere(['project_user_id' => $id]),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('projects', [
+//            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionGroups()
+    {
+        $id = Yii::$app->user->id;
+//        $model = ProjectUserProject::find()->andWhere(['project_user_id' => $id])->all();
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => ProjectGroup::find()->andWhere(['in', 'project_id',[1,2,3,4]]),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+            return $this->render('groups', [
+    //            'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+    }
+
 }

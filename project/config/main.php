@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-project',
-    'name' => 'Project template',
+    'name' => 'PPSDM Assessment Center',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'project\controllers',

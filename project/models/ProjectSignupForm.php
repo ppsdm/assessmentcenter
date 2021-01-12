@@ -59,7 +59,7 @@ class ProjectSignupForm extends Model
         $user->generateEmailVerificationToken();
 
         return $user->save()
-//            && $this->sendEmail($user)
+            && $this->sendEmail($user)
             ;
 
 
@@ -79,7 +79,7 @@ class ProjectSignupForm extends Model
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => ' PPSDM admin'])
             ->setTo($this->email)
             ->setSubject('Account registration at ' . Yii::$app->name)
             ->send();
