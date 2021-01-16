@@ -1,0 +1,50 @@
+Message-ID: <d5472a2c0e2087d7121ab831a88020f8@localhost>
+Date: Sat, 16 Jan 2021 08:57:46 +0100
+Subject: Password reset for PPSDM Assessment Center
+From: PPSDM Assessment Center robot <support@example.com>
+To: renowijoyo@gamantha.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_1610783866_e253195ed78112951637b3c47e19d1dc_=_"
+
+
+--_=_swift_1610783866_e253195ed78112951637b3c47e19d1dc_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+Hello renowijoyo@gamanthasssss.com,
+
+Follow the link below to reset your password:
+
+http://localhost/assessmentcenter/project/web/index.php/site/reset-password=
+?token=3DYF0obu7hu15-rO3meadxOYZQN2TtXUol_1610783866
+
+--_=_swift_1610783866_e253195ed78112951637b3c47e19d1dc_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+" />
+    <title></title>
+    </head>
+<body>
+        <div class=3D"password-reset">
+    <p>Hello renowijoyo@gamanthasssss.com,</p>
+
+    <p>Follow the link below to reset your password:</p>
+
+    <p><a href=3D"http://localhost/assessmentcenter/project/web/index.php/s=
+ite/reset-password?token=3DYF0obu7hu15-rO3meadxOYZQN2TtXUol_1610783866">htt=
+p://localhost/assessmentcenter/project/web/index.php/site/reset-password?to=
+ken=3DYF0obu7hu15-rO3meadxOYZQN2TtXUol_1610783866</a></p>
+</div>
+    </body>
+</html>
+
+
+--_=_swift_1610783866_e253195ed78112951637b3c47e19d1dc_=_--

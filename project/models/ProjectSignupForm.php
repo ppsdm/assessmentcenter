@@ -13,6 +13,8 @@ class ProjectSignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $first_name;
+    public $last_name;
 //    public $project_id;
 
 
@@ -24,6 +26,11 @@ class ProjectSignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
+            ['first_name', 'trim'],
+//            ['first_name', 'required'],
+            ['last_name', 'trim'],
+//            ['last_name', 'required'],
+
 //            ['username', 'unique', 'targetClass' => '\project\models\ProjectUser', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
@@ -58,11 +65,12 @@ class ProjectSignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save()
-            && $this->sendEmail($user)
-            ;
-
-
+        if ($user->save()
+            && $this->sendEmail($user)) {
+            return $user;
+        } else {
+            return false;
+        }
 
     }
 

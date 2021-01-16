@@ -41,7 +41,21 @@ return $model->taoGroup->group_name;
                 }
             ],
             [
+                'label' => 'Tao Group URI',
+                'value' => function ($model) {
+                    return $model->taoGroup->group_uri;
+                }
+            ],
+            [
                 'label' => 'Sync?',
+                'value' => function ($model) use ($taogroups) {
+        if (in_array($model->taoGroup->group_uri, $taogroups)) {
+            return 'yes';
+        } else {
+            return 'no';
+        }
+
+                }
             ],
 
             //  ['class' => 'yii\grid\ActionColumn'],
@@ -49,5 +63,6 @@ return $model->taoGroup->group_name;
     ]); ?>
 
     <?php Pjax::end(); ?>
+
 
 </div>

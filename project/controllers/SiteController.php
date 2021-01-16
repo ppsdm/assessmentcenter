@@ -3,14 +3,17 @@ namespace project\controllers;
 
 
 //use frontend\models\ResendVerificationEmailForm;
+use Cassandra\Statement;
 use frontend\models\Profile;
 use frontend\models\SignupForm;
 use project\models\Project;
 use project\models\ProjectGroup;
+use project\models\ProjectPreassigned;
 use project\models\ProjectTaouser;
 use project\models\ProjectUser;
 use project\models\ProjectUserProfile;
 use project\models\ProjectUserProject;
+use project\models\TaoStatements;
 use project\models\TaoUser;
 use project\models\VerifyEmailForm;
 use project\models\ProjectLoginForm;
@@ -25,6 +28,7 @@ use project\models\ProjectUserSearch;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -178,67 +182,43 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-
-    public function actionSignup()
+    public function preassignedGroups($username)
     {
-        $newUser = new TaoUser();
-
-        if ($newUser->load(Yii::$app->request->post())
-        ) {
-            $user = $this->createNewUser($newUser);
-            //add tao user ID with project user id
-            $projectnewuser = ProjectUser::find()
-//                    ->andWhere(['project_id' => $this->project_id])
-                ->andWhere(['username' => $newUser->username])->One();
-            if ($user) {
-                $newUser->user_id = $projectnewuser->id;
-                $newUser->save();
-//                    $taoUser->user_id = $user->id;
-                Yii::$app->session->setFlash('success', $newUser->username);
-            }
+        $userT = ProjectUser::find()->andWhere(['username' => $username])->One();
+        $projects = ProjectPreassigned::find()->andWhere(['username' => $userT->username])->all();
+        foreach($projects as $project) {
+            $new = new ProjectUserProject;
+            $new->project_id = $project->projectId;
+            $new->project_user_id = $userT->id;
+            $new->save();
         }
 
-        return $this->render('signup',
-            ['model' => $newUser,
-            ]);
+        Yii::$app->session->addFlash('success', $userT->username);
 
+        return;
     }
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignupNEW()
+    public function actionSignup()
     {
-        $newUser = new TaoUser();
+        $newUser = new ProjectSignupForm();
 
         if ($newUser->load(Yii::$app->request->post())
         ) {
-            $taoUser = $this->createNewTaoUser($newUser);
+//    echo '<pre>';
+//            print_r($newUser);
+            $user = $this->createNewUser($newUser);
 
-            if ($taoUser->success)
-            {
-                $changename = $this->changeTaoLabel($newUser ,$taoUser->uri);
 
-            $assigntogroup = $this->assignTaoUserToGroup( "https://cat.ppsdm.com/cat.rdf#i1603326718823824000",$taoUser->uri);
-
-                $user = $this->createNewUser($newUser);
-                //add tao user ID with project user id
-                $projectnewuser = ProjectUser::find()
-//                    ->andWhere(['project_id' => $this->project_id])
-                    ->andWhere(['username' => $newUser->username])->One();
-                if ($user) {
-                    $newUser->user_id = $projectnewuser->id;
-                    $newUser->save();
+            //add tao user ID with project user id
+//            $projectnewuser = ProjectUser::find()
+////                    ->andWhere(['project_id' => $this->project_id])
+//                ->andWhere(['username' => $newUser->username])->One();
+            if ($user) {
+                $this->preassignedGroups($newUser->username);
+//                $newUser->user_id = $projectnewuser->id;
+//                $newUser->save();
 //                    $taoUser->user_id = $user->id;
-                    Yii::$app->session->setFlash('success', $taoUser->uri);
-                }
-
+                Yii::$app->session->addFlash('success', 'preassigned groups');
             }
-//
-
-
-            // return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('signup',
@@ -294,7 +274,7 @@ class SiteController extends Controller
 //        echo '<pre/>';
 //        print_r($model);
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            $uri = ProjectTaouser::find()->andWhere(['user_id' => $model->id])->One();
+            $uri = ProjectTaouser::find()->andWhere(['project_user_id' => $model->id])->One();
             $success = $this->changeTaoPassword($uri->user_uri,$model->password);
             if ($success) {
                 Yii::$app->session->setFlash('success', 'New password saved.');
@@ -340,7 +320,8 @@ class SiteController extends Controller
     {
         $getUrl = Yii::$app->params['tao_base_url'] . '/taoTestTaker/api/testTakers?'
             . 'login='.$newUser->username
-//            . '&label='.$newUser->first_name . ' ' . $newUser->last_name
+            . '&label='.$newUser->username
+            //            . '&label='.$newUser->first_name . ' ' . $newUser->last_name
 //            . '&firstName='.(property_exists($newUser,'first_name')) ? $newUser->first_name   : ""
 //            . '&lastName='.(property_exists($newUser,'last_name')) ? $newUser->first_name   : ""
             .'&password='.$newUser->password
@@ -408,10 +389,24 @@ class SiteController extends Controller
 //        $model->project_id = '1'; #untuk project kemeninfo
 
         if ($usermodel = $model->signup()) {
+
+            $projectuserprofile = new ProjectUserProfile;
+            $profile = new Profile;
+            $profile->first_name = $newUser->first_name;
+            $profile->last_name = $newUser->last_name;
+            $profile->full_name = $newUser->first_name . '_' . $newUser->last_name;
+            $profile->save();
+
+            $projectuserprofile->projectUserId = $usermodel->id;
+            $projectuserprofile->profileId = $profile->id;
+            $projectuserprofile->save();
+
+
+
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
 //            return $this->goHome();
         } else {
-            Yii::$app->session->setFlash('danger', $model->errors['email'][0]);
+            Yii::$app->session->setFlash('danger', json_encode($model->errors));
 
         }
 
@@ -501,6 +496,50 @@ echo '<pre/>';
     }
 
 
+    /***
+     * @return \yii\web\Response
+     * menggunakan REST, tapi implementasi kurang lengkap.
+     * lebih baik langsung ke database saja.
+     * kekurangan dengan REST :
+     * 1. group tao harus tidak boleh di bawah folder
+     * 2. bias duplikat masukkin ke tabel statements saat join group dan ada unnecessary pair data entry antara object-subject dan subject-object
+     */
+public function joinGroup()
+{
+    $user = Yii::$app->user;
+$projecttaouser = ProjectTaouser::find()->andWhere(['project_user_id' => $user->id])->one();
+//echo $projecttaouser->user_uri;
+
+
+
+            $projects = ProjectUserProject::find()->andWhere(['project_user_id' => $user->id])->all();
+        $ids = ArrayHelper::getColumn($projects, 'project_id');
+
+$groups = ProjectGroup::find()->andWhere(['in', 'project_id',$ids])->All();
+
+foreach ($groups as $group) {
+    echo '<br/><br/>';
+    echo $group->taoGroup->group_name . ' : ' . $group->taoGroup->group_uri;
+
+         $groupexists = TaoStatements::find()->andWhere(['subject' => $projecttaouser->user_uri])->andWhere(['predicate' => 'http://www.tao.lu/Ontologies/TAOGroup.rdf#member'])
+             ->andWhere(['object' => $group->taoGroup->group_uri])->One();
+         if (isset($groupexists)) {
+             echo 'ALREADY EXISTED';
+         } else {
+             $response = $this->assignTaoUserToGroup($group->taoGroup->group_uri,$projecttaouser->user_uri);
+         }
+
+    if (isset($response->errorMsg))
+    {
+        echo $response->errorMsg;           //MESTI LIHAT STRING SAAT CALL API NYA
+    }
+
+}
+
+//    return $this->redirect(Yii::$app->request->referrer);
+    Yii::$app->session->addFlash('success', 'join group success');
+return;
+}
 
     public function assignTaoUserToGroup($uri, $member)
     {
@@ -523,12 +562,12 @@ echo '<pre/>';
         $apiResponse = curl_exec($cURLConnection);
         curl_close($cURLConnection);
         $taoUser = json_decode($apiResponse);
-
+        echo '<br/>' . $getUrl . '<br/>';
         if ($taoUser->success) {
 
-            Yii::$app->session->setFlash('success', 'tao success ');
+//            Yii::$app->session->setFlash('success', 'tao success ');
         } else {
-            Yii::$app->session->setFlash('warning', 'tao add group error  : ' . $taoUser->errorMsg);
+//            Yii::$app->session->setFlash('warning', 'tao add group error  : ' . $taoUser->errorMsg);
         }
 
         return $taoUser;
@@ -594,6 +633,10 @@ echo '<pre/>';
 
 
 
+    public function actionNamesync()
+    {
+
+    }
 
     public function actionTaosync()
     {
@@ -607,23 +650,23 @@ echo '<pre/>';
                 $user = $model->getUser();
                 if (!$user->validatePassword($model->password)) {
                     Yii::$app->session->addFlash('error', 'WRONG PASSWORD');
-                    echo 'wrong password';
+                    return $this->refresh();
+//                    echo 'wrong password';
                 }  else {
                     Yii::$app->session->addFlash('success', 'Verified');
 
 //                    echo '<pre>';
 //                    print_r($model);
 
-                    $taoUser = $this->createNewTaoUser($model);
+                    $projecttaouser = $this->createNewTaoUser($model);
 //
-                    if ($taoUser->success)
+                    if ($projecttaouser->success)
                     {
 //                        $changename = $this->changeTaoLabel($user,$taoUser->uri);
 
 //                        $assigntogroup = $this->assignTaoUserToGroup( "https://cat.ppsdm.com/cat.rdf#i1603326718823824000",$taoUser->uri);
 
-                            Yii::$app->session->addFlash('success', $taoUser->uri);
-
+                            Yii::$app->session->addFlash('success', $projecttaouser ->uri);
                     } else {
 
                         /*
@@ -634,11 +677,49 @@ echo '<pre/>';
 //                        $this->changeTaoPassword()
 //                        echo '<pre>';
 //                        print_r($taoUser);
-                        Yii::$app->session->addFlash('danger', 'somthieng wrong ');
+
+                        $taoobject = TaoStatements::find()->andWhere(['object' => $model->username])->andWhere(['predicate' => 'http://www.tao.lu/Ontologies/generis.rdf#login'])->One();
+                        if (isset($taoobject))
+                        {
+
+                            $projecttaouser = ProjectTaouser::find()->andWhere(['project_user_id' => $user->id])->One();
+                            if (isset($projecttaouser)) {
+                                $projecttaouser->project_user_id = $user->id;
+                                $projecttaouser->user_uri = $taoobject->subject;
+                                $projecttaouser->username = $model->username;
+                                $projecttaouser->status = 'resync';
+                            } else {
+                                $projecttaouser = new ProjectTaouser;
+                                $projecttaouser->project_user_id = $user->id;
+                                $projecttaouser->user_uri = $taoobject->subject;
+                                $projecttaouser->username = $model->username;
+                                $projecttaouser->status = 'resync';
+                            }
+
+
+
+                            $projecttaouser->save();
+//                            Yii::$app->session->addFlash('warning', 'tao user previously existed and re-saved : ' . $taoobject->subject);
+
+                        }
+//                        Yii::$app->session->addFlash('danger', 'somthieng wrong ');
+
                     }
+
+                    //update projecttaouser
+
+
+                    $this->joinGroup();
+                    $profile = ProjectUserProfile::find()->andWhere(['projectUserId' => $user->id])->One();
+                    $this->changeTaoLabel($profile->profile, $projecttaouser->user_uri); //first name last name masih belum bener
+
+
+//                    return $this->redirect(Yii::$app->request->referrer);
+                    Yii::$app->session->addFlash('success', '========= ' . $profile->profile->first_name);
+                            return $this->refresh();
                 }
 
-            return $this->goBack();
+
         } else {
             $model->password = '';
 
@@ -730,20 +811,31 @@ echo '<pre/>';
     public function actionGroups()
     {
         $id = Yii::$app->user->id;
-//        $model = ProjectUserProject::find()->andWhere(['project_user_id' => $id])->all();
+        $projects = ProjectUserProject::find()->andWhere(['project_user_id' => $id])->all();
+        $ids = ArrayHelper::getColumn($projects, 'project_id');
 
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => ProjectGroup::find()->andWhere(['in', 'project_id',[1,2,3,4]]),
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
+        $taousermodel = ProjectTaouser::find()->andWhere(['project_user_id' => $id])->One();
 
-            return $this->render('groups', [
-    //            'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+
+        $taogroups = TaoStatements::find()->andWhere(['subject' => $taousermodel->user_uri])->andWhere(['predicate' => 'http://www.tao.lu/Ontologies/TAOGroup.rdf#member'])->All();
+
+        $groupuris = ArrayHelper::getColumn($taogroups, 'object');
+
+echo '<pre>';
+print_r($taogroups);
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => ProjectGroup::find()->andWhere(['in', 'project_id',$ids]),
+//            'pagination' => [
+//                'pageSize' => 20,
+//            ],
+//        ]);
+//
+//
+//            return $this->render('groups', [
+//                'dataProvider' => $dataProvider,
+//                'taogroups' => $taogroups
+//            ]);
     }
 
 }

@@ -20,6 +20,11 @@ use Yii;
  */
 class ProjectTaouser extends \yii\db\ActiveRecord
 {
+
+    public $username;
+    public $password;
+
+
     /**
      * {@inheritdoc}
      */

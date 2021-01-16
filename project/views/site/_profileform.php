@@ -8,10 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php
-
-
-echo 'is user in tao yet?<br/>';
-echo 'is user'
+echo Html::a('Taosync', ['site/taosync'], ['class' => 'btn btn-primary'])
 ?>
 <div class="project-user-form">
 
