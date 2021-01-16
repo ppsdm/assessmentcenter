@@ -35027,3 +35027,108 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1610783946.2176
     'REQUEST_TIME' => 1610783946
 ]
+2021-01-16 09:46:21 [::1][-][s40el019peuv5418u63ol1fipf][error][Swift_TransportException] Swift_TransportException: Expected response code 250 but got code "553", with message "553 5.7.1 <support@example.com>: Sender address rejected: not owned by user management@ppsdm.com
+" in C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php:460
+Stack trace:
+#0 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php(345): Swift_Transport_AbstractSmtpTransport->assertResponseCode('553 5.7.1 <supp...', Array)
+#1 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\EsmtpTransport.php(305): Swift_Transport_AbstractSmtpTransport->executeCommand('MAIL FROM:<supp...', Array, '<span class="st...', false, NULL)
+#2 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php(393): Swift_Transport_EsmtpTransport->executeCommand('DATA\r\n', Array, '<span class="st...')
+#3 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php(500): Swift_Transport_AbstractSmtpTransport->doDataCommand('<span class="st...')
+#4 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php(519): Swift_Transport_AbstractSmtpTransport->doMailTransaction(Object(Swift_Message), 'support@example...', Array, '<span class="st...')
+#5 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php(206): Swift_Transport_AbstractSmtpTransport->sendTo(Object(Swift_Message), 'support@example...', Array, '<span class="st...')
+#6 C:\xampp\htdocs\assessmentcenter\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Mailer.php(71): Swift_Transport_AbstractSmtpTransport->send(Object(Swift_Message), '<span class="st...')
+#7 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2-swiftmailer\src\Mailer.php(156): Swift_Mailer->send(Object(Swift_Message))
+#8 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\mail\BaseMailer.php(263): yii\swiftmailer\Mailer->sendMessage(Object(yii\swiftmailer\Message))
+#9 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\mail\BaseMessage.php(49): yii\mail\BaseMailer->send(Object(yii\swiftmailer\Message))
+#10 C:\xampp\htdocs\assessmentcenter\project\models\ProjectPasswordResetRequestForm.php(69): yii\mail\BaseMessage->send()
+#11 C:\xampp\htdocs\assessmentcenter\project\controllers\SiteController.php(242): project\models\ProjectPasswordResetRequestForm->sendEmail()
+#12 [internal function]: project\controllers\SiteController->actionRequestPasswordReset()
+#13 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\base\InlineAction.php(57): call_user_func_array(Array, Array)
+#14 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\base\Controller.php(181): yii\base\InlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\base\Module.php(534): yii\base\Controller->runAction('request-passwor...', Array)
+#16 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\web\Application.php(104): yii\base\Module->runAction('site/request-pa...', Array)
+#17 C:\xampp\htdocs\assessmentcenter\vendor\yiisoft\yii2\base\Application.php(392): yii\web\Application->handleRequest(Object(yii\web\Request))
+#18 C:\xampp\htdocs\assessmentcenter\project\web\index.php(17): yii\base\Application->run()
+#19 {main}
+2021-01-16 09:46:17 [::1][-][s40el019peuv5418u63ol1fipf][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-project' => 'i4ITbNXgrI4ehifhq8kms0RZqhJMqpXD5U1qWZG3hjrlsGsOuKrJuGuyd6qTi2T2ESHlIjrp2qqIElNg5ObrfQ=='
+    'ProjectPasswordResetRequestForm' => [
+        'email' => 'renowijoyo@gamantha.com'
+    ]
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    '_ga' => 'GA1.1.1448180224.1600078230'
+    '_identity' => 'b5108604b61ffd4b00d85496149aac184de587419f05f877b1b7842eb9eb0eaaa:2:{i:0;s:9:\"_identity\";i:1;s:46:\"[1,\"oVeO8pUML7msV2sywEmlWvYHip40Im8S\",2592000]\";}'
+    'Phpstorm-b46e2fbe' => '31e8856c-640f-4288-a585-4ed43c23a8fb'
+    'advanced-frontend' => '6tl915u2hvpe1464gbpstuna2v'
+    '_csrf-frontend' => 'ed1f5bdb23abaf6f36b223e1720d152d01c62e60c1f87627e7faab3a538bcaaca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fX6b7EzFr3uvLc5TQ7bhDhChTfH4Kv_n\";}'
+    '_csrf-project' => '09f0ed4d35066ea531974c73794b9e0800a0e3e68551d2013fcfbdd825f1ed89a:2:{i:0;s:13:\"_csrf-project\";i:1;s:32:\"n2xbmJe6u4PK8BBEUxO0vCOim_99uQmG\";}'
+    'advanced-project' => 's40el019peuv5418u63ol1fipf'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'MIBDIRS' => 'C:/xampp/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'C:/xampp/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'localhost'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '175'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_SEC_CH_UA' => '\"Google Chrome\";v=\"87\", \" Not;A Brand\";v=\"99\", \"Chromium\";v=\"87\"'
+    'HTTP_SEC_CH_UA_MOBILE' => '?0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_ORIGIN' => 'http://localhost'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_SEC_FETCH_SITE' => 'same-origin'
+    'HTTP_SEC_FETCH_MODE' => 'navigate'
+    'HTTP_SEC_FETCH_USER' => '?1'
+    'HTTP_SEC_FETCH_DEST' => 'document'
+    'HTTP_REFERER' => 'http://localhost/assessmentcenter/project/web/index.php/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,id-ID;q=0.8,id;q=0.7,th;q=0.6'
+    'HTTP_COOKIE' => '_ga=GA1.1.1448180224.1600078230; _identity=b5108604b61ffd4b00d85496149aac184de587419f05f877b1b7842eb9eb0eaaa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22oVeO8pUML7msV2sywEmlWvYHip40Im8S%22%2C2592000%5D%22%3B%7D; Phpstorm-b46e2fbe=31e8856c-640f-4288-a585-4ed43c23a8fb; advanced-frontend=6tl915u2hvpe1464gbpstuna2v; _csrf-frontend=ed1f5bdb23abaf6f36b223e1720d152d01c62e60c1f87627e7faab3a538bcaaca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fX6b7EzFr3uvLc5TQ7bhDhChTfH4Kv_n%22%3B%7D; _csrf-project=09f0ed4d35066ea531974c73794b9e0800a0e3e68551d2013fcfbdd825f1ed89a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-project%22%3Bi%3A1%3Bs%3A32%3A%22n2xbmJe6u4PK8BBEUxO0vCOim_99uQmG%22%3B%7D; advanced-project=s40el019peuv5418u63ol1fipf'
+    'PATH' => 'C:\\Python38\\Scripts\\;C:\\Python38\\;C:\\Program Files (x86)\\NetSarang\\Xftp 6\\;C:\\Program Files (x86)\\NetSarang\\Xshell 6\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Java\\jdk-14.0.2\\bin;C:\\xampp\\php;C:\\ProgramData\\ComposerSetup\\bin;C:\\ProgramData\\chocolatey\\bin;;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\ProgramData\\DockerDesktop\\version-bin;C:\\Go\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\renow\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\renow\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Users\\renow\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\renow\\go\\bin;C:\\Users\\renow\\AppData\\Roaming\\npm'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.46 (Win64) OpenSSL/1.1.1g PHP/7.4.9 Server at localhost Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.46 (Win64) OpenSSL/1.1.1g PHP/7.4.9'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_ADDR' => '::1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '::1'
+    'DOCUMENT_ROOT' => 'C:/xampp/htdocs'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/xampp/htdocs'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'C:/xampp/htdocs/assessmentcenter/project/web/index.php'
+    'REMOTE_PORT' => '53330'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/assessmentcenter/project/web/index.php/site/request-password-reset'
+    'SCRIPT_NAME' => '/assessmentcenter/project/web/index.php'
+    'PATH_INFO' => '/site/request-password-reset'
+    'PATH_TRANSLATED' => 'C:\\xampp\\htdocs\\site\\request-password-reset'
+    'PHP_SELF' => '/assessmentcenter/project/web/index.php/site/request-password-reset'
+    'REQUEST_TIME_FLOAT' => 1610786777.6235
+    'REQUEST_TIME' => 1610786777
+]

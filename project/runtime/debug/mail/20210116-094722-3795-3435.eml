@@ -1,26 +1,26 @@
-Message-ID: <d540664b1613a00e4621283d8528da76@localhost>
-Date: Sat, 16 Jan 2021 08:52:47 +0100
+Message-ID: <cc10a45e57dd7d89a07605c3d7a5367f@localhost>
+Date: Sat, 16 Jan 2021 09:47:18 +0100
 Subject: Password reset for PPSDM Assessment Center
-From: PPSDM Assessment Center robot <support@example.com>
+From: PPSDM Assessment Center robot <management@ppsdm.com>
 To: renowijoyo@gamantha.com
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
- boundary="_=_swift_1610783567_1472809d9ee2a111821c599c4c76fd9c_=_"
+ boundary="_=_swift_1610786838_ec527f2453bef62c8f122d3e557d803e_=_"
 
 
---_=_swift_1610783567_1472809d9ee2a111821c599c4c76fd9c_=_
+--_=_swift_1610786838_ec527f2453bef62c8f122d3e557d803e_=_
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 
-Hello renowijoyo@gamanthasssss.com,
+Hello renowijoyo@gamantha.com,
 
 Follow the link below to reset your password:
 
 http://localhost/assessmentcenter/project/web/index.php/site/reset-password=
-?token=3DU4JDP6nk_N53LZdsB1hqmSo4AElvo94Y_1610783566
+?token=3DxHfhKC3XEog8SLmcr_wO6AaF40x1e9xd_1610786777
 
---_=_swift_1610783567_1472809d9ee2a111821c599c4c76fd9c_=_
+--_=_swift_1610786838_ec527f2453bef62c8f122d3e557d803e_=_
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -34,17 +34,17 @@ Content-Transfer-Encoding: quoted-printable
     </head>
 <body>
         <div class=3D"password-reset">
-    <p>Hello renowijoyo@gamanthasssss.com,</p>
+    <p>Hello renowijoyo@gamantha.com,</p>
 
     <p>Follow the link below to reset your password:</p>
 
     <p><a href=3D"http://localhost/assessmentcenter/project/web/index.php/s=
-ite/reset-password?token=3DU4JDP6nk_N53LZdsB1hqmSo4AElvo94Y_1610783566">htt=
+ite/reset-password?token=3DxHfhKC3XEog8SLmcr_wO6AaF40x1e9xd_1610786777">htt=
 p://localhost/assessmentcenter/project/web/index.php/site/reset-password?to=
-ken=3DU4JDP6nk_N53LZdsB1hqmSo4AElvo94Y_1610783566</a></p>
+ken=3DxHfhKC3XEog8SLmcr_wO6AaF40x1e9xd_1610786777</a></p>
 </div>
     </body>
 </html>
 
 
---_=_swift_1610783567_1472809d9ee2a111821c599c4c76fd9c_=_--
+--_=_swift_1610786838_ec527f2453bef62c8f122d3e557d803e_=_--

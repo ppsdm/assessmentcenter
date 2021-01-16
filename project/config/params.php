@@ -1,6 +1,6 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'management@ppsdm.com',
 
         // list of parameters
         'tao_rest_url' => 'sadsa',
