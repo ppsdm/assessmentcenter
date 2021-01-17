@@ -66,8 +66,6 @@ return [
 //                'encryption' => 'tls',
 //                'host' => 'smtp.gmail.com',
 //                'port' => '587',
-//                'username' => 'renowijoyo@gmail.com',
-//                'password' => 'RAN4ever#',
             ],
         ],
 

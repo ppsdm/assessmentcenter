@@ -46,6 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return substr($groupstring, 2);
                 }
             ],
+            [
+                    'label' => 'action',
+                'format' => 'raw',
+                'value' => function($model) {
+        return '<a href="project/'. $model->id.'">view</a>';
+                }
+            ],
 //            [
 //                'label' => 'view result',
 //            ],

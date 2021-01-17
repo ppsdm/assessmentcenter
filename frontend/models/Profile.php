@@ -14,11 +14,14 @@ use Yii;
  * @property string|null $gender
  * @property string|null $religion
  * @property string|null $birthday
+ * @property string|null $birthplace
  *
  * @property Assessor[] $assessors
+ * @property ProfileContact[] $profileContacts
  * @property ProfileExt[] $profileExts
  * @property ProfileLk[] $profileLks
  * @property ProjectProfile[] $projectProfiles
+ * @property ProjectUserProfile[] $projectUserProfiles
  * @property Test[] $tests
  * @property UserProfile[] $userProfiles
  */
@@ -39,7 +42,7 @@ class Profile extends \yii\db\ActiveRecord
     {
         return [
             [['birthday'], 'safe'],
-            [['first_name', 'last_name', 'full_name', 'gender', 'religion'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'full_name', 'gender', 'religion', 'birthplace'], 'string', 'max' => 255],
         ];
     }
 
@@ -56,6 +59,7 @@ class Profile extends \yii\db\ActiveRecord
             'gender' => Yii::t('app', 'Gender'),
             'religion' => Yii::t('app', 'Religion'),
             'birthday' => Yii::t('app', 'Birthday'),
+            'birthplace' => Yii::t('app', 'Birthplace'),
         ];
     }
 
@@ -67,6 +71,16 @@ class Profile extends \yii\db\ActiveRecord
     public function getAssessors()
     {
         return $this->hasMany(Assessor::className(), ['profileId' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ProfileContacts]].
+     *
+     * @return \yii\db\ActiveQuery|ProfileContactQuery
+     */
+    public function getProfileContacts()
+    {
+        return $this->hasMany(ProfileContact::className(), ['profileId' => 'id']);
     }
 
     /**
@@ -97,6 +111,16 @@ class Profile extends \yii\db\ActiveRecord
     public function getProjectProfiles()
     {
         return $this->hasMany(ProjectProfile::className(), ['profileId' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ProjectUserProfiles]].
+     *
+     * @return \yii\db\ActiveQuery|ProjectUserProfileQuery
+     */
+    public function getProjectUserProfiles()
+    {
+        return $this->hasMany(ProjectUserProfile::className(), ['profileId' => 'id']);
     }
 
     /**

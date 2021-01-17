@@ -6,9 +6,13 @@ namespace project\controllers;
 use Cassandra\Statement;
 use frontend\models\Profile;
 use frontend\models\SignupForm;
+use yii\helpers\Url;
+use project\models\ProfileContact;
+use project\models\ProfileExt;
 use project\models\Project;
 use project\models\ProjectGroup;
 use project\models\ProjectPreassigned;
+use project\models\ProjectProfileData;
 use project\models\ProjectTaouser;
 use project\models\ProjectUser;
 use project\models\ProjectUserProfile;
@@ -275,14 +279,17 @@ class SiteController extends Controller
 //        print_r($model);
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             $uri = ProjectTaouser::find()->andWhere(['project_user_id' => $model->id])->One();
-            $success = $this->changeTaoPassword($uri->user_uri,$model->password);
-            if ($success) {
-                Yii::$app->session->setFlash('success', 'New password saved.');
-            } else {
-                Yii::$app->session->setFlash('danger', 'tao password is UNCHANGED.');
+            if (isset($uri)) {
+                $success = $this->changeTaoPassword($uri->user_uri,$model->password);
+                if ($success) {
+//                    Yii::$app->session->setFlash('success', 'New password saved.');
+                } else {
+                    Yii::$app->session->addFlash('danger', 'tao password is UNCHANGED.');
+                }
+
             }
 
-
+            Yii::$app->session->addFlash('success', 'New password saved.');
             return $this->goHome();
         }
 
@@ -638,6 +645,14 @@ return;
 
     }
 
+    /***
+     * @return string|\yii\web\Response
+     * intinya yg dilakukan :
+     * 1. create new tao user (kalau belum)
+     * 2. join group uri (kalau belum)
+     * 3. assign user uri ke user_id
+     * 4. update label nama user tao
+     */
     public function actionTaosync()
     {
 
@@ -651,12 +666,10 @@ return;
                 if (!$user->validatePassword($model->password)) {
                     Yii::$app->session->addFlash('error', 'WRONG PASSWORD');
                     return $this->refresh();
-//                    echo 'wrong password';
+
                 }  else {
                     Yii::$app->session->addFlash('success', 'Verified');
 
-//                    echo '<pre>';
-//                    print_r($model);
 
                     $projecttaouser = $this->createNewTaoUser($model);
 //
@@ -740,16 +753,32 @@ return;
     {
         if (!Yii::$app->user->isGuest) {
                 $id = Yii::$app->user->id;
-
-
-
             $UserProfileModel = ProjectUserProfile::find()->andWhere(['projectUserId' => $id])->One();
-            $taomodel = ProjectTaouser::find()->andWhere(['project_user_id' => $id])->One();
+
             if ( isset($UserProfileModel)){
                 $model = $UserProfileModel->profile;
+
+
             } else {
                 $model = new Profile;
                 $UserProfileModel = new ProjectUserProfile();
+            }
+
+
+            $taomodel = ProjectTaouser::find()->andWhere(['project_user_id' => $id])->One();
+            $profileext = ProfileExt::find()->andWhere(['profileId' => $UserProfileModel->profileId])->One();
+            if(isset($profileext)) {
+
+            } else {
+                $profileext = new ProfileExt();
+                $profileext->profileId = $UserProfileModel->profileId;
+            }
+            $profilecontact = ProfileContact::find()->andWhere(['profileId' => $UserProfileModel->profileId])->One();
+            if (isset($profilecontact)) {
+
+            } else {
+                $profilecontact = new ProfileContact();
+                $profilecontact->profileId = $UserProfileModel->profileId;
             }
 
 
@@ -761,32 +790,73 @@ return;
             }
 
 
-//            $model = $UserProfileModel->profile;
-//            if (null == $UserProfileModel) {
-//                $model = new Profile;
-//                $model->save();
-//                $UserProfileModel = new UserProfile();
-//                $UserProfileModel->userId = $id;
-//                $UserProfileModel->profileId = $model->id;
-//                $UserProfileModel->save();
-//            }
-
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 $UserProfileModel->profileId = $model->id;
                 $UserProfileModel->projectUserId = $id;
+
                 $UserProfileModel->save();
+                $profilecontact->address = Yii::$app->request->post('ProfileContact')['address'];
+                $profileext->identity_no = Yii::$app->request->post('ProfileExt')['identity_no'];
+                $profileext->last_education = Yii::$app->request->post('ProfileExt')['last_education'];
+                $profilecontact->save();
+                $profileext->save();
                 //  return $this->redirect(['view', 'id' => $model->id]);
                 Yii::$app->session->setFlash('success', 'Profile is saved');
+
+//                print_r(Yii::$app->request->post('ProfileContact')['address']);
                 return $this->refresh();
             }
 
             return $this->render('profile', [
                 'model' => $model,
-                'taomodel' => $taomodel
+                'taomodel' => $taomodel,
+                'profilecontact' => $profilecontact,
+                'profileext' => $profileext
+
             ]);
         } else {
             return $this->goHome();
         }
+    }
+
+    public function actionProject($id)
+    {
+
+        $userid = Yii::$app->user->id;
+        $profilemodel = ProjectUserProfile::find()->andWhere(['projectUserId' => $userid])->One();
+        if (isset($profilemodel)) {
+            echo 'isi';
+            $profiledata = ProjectProfileData::find()->andWhere(['profileId' => $profilemodel->id])->andWhere(['projectId' => $id])->One();
+            if (isset($profiledata)) {
+
+            } else {
+                $profiledata = new ProjectProfileData;
+                $profiledata->projectId = $id;
+                $profiledata->profileId = $profilemodel->id;
+            }
+        } else {
+
+        }
+
+        if ($profiledata->load(Yii::$app->request->post()) && $profiledata->save()) {
+
+            Yii::$app->session->setFlash('success', 'Profile is saved');
+
+
+                return $this->render('taoframe', [
+    //                'profiledata' => $profiledata
+
+                ]);
+
+//$url = Url::to('https://cat.ppsdm.com');
+//            return $this->redirect($url);
+//            return $this->refresh();
+        }
+
+        return $this->render('project', [
+            'profiledata' => $profiledata
+
+        ]);
     }
 
     public function actionProjects()

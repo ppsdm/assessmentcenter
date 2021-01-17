@@ -18,7 +18,9 @@ $this->title = Yii::t('app', 'Update Profile User: {name}', [
 
     <?= $this->render('_profileform', [
         'model' => $model,
-        'taomodel' => $taomodel
+        'taomodel' => $taomodel,
+        'profileext' => $profileext,
+        'profilecontact' => $profilecontact
     ]) ?>
 
 </div>
